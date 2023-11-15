@@ -10,6 +10,7 @@ import InPageNavigation, {
 import Loader from "../components/common/Loader"
 import BlogCard from "../components/common/cards/BlogCard"
 import MinimalBlogPostCard from "../components/common/cards/MinimalBlogPostCard"
+import NodataMessage from "../components/common/NodataMessage"
 
 const Home = () => {
     const [blogs, setBlogs] = useState(null)
@@ -23,12 +24,27 @@ const Home = () => {
         "kde plasma",
         "github",
         "new dev",
-        "hello world",
+        "hello",
+        "test",
+        "card"
     ]
 
     const fetchLatestBlogs = () => {
         axios
             .get(`${import.meta.env.VITE_API_URL}/blogs/latest`)
+            .then(({ data }) => {
+                setBlogs(data?.blogs)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    const fetchBlogsByCategory = () => {
+        axios
+            .post(`${import.meta.env.VITE_API_URL}/blogs/search`, {
+                tag: pageState,
+            })
             .then(({ data }) => {
                 setBlogs(data?.blogs)
             })
@@ -57,6 +73,8 @@ const Home = () => {
 
         if (pageState === "home") {
             fetchLatestBlogs()
+        } else {
+            fetchBlogsByCategory()
         }
 
         if (!trendingBlogs) {
@@ -89,7 +107,7 @@ const Home = () => {
                         {/* latest blogs */}
                         {blogs === null ? (
                             <Loader />
-                        ) : (
+                        ) : blogs.length ? (
                             blogs.map((blog, index) => (
                                 <AnimationWrapper
                                     key={blog?.blog_id}
@@ -104,12 +122,14 @@ const Home = () => {
                                     />
                                 </AnimationWrapper>
                             ))
+                        ) : (
+                            <NodataMessage message="No blog published" />
                         )}
 
                         {/* trending blogs only for md devices */}
                         {trendingBlogs === null ? (
                             <Loader />
-                        ) : (
+                        ) : trendingBlogs.length ? (
                             trendingBlogs.map((blog, index) => (
                                 <AnimationWrapper
                                     key={blog?.blog_id}
@@ -124,6 +144,8 @@ const Home = () => {
                                     />
                                 </AnimationWrapper>
                             ))
+                        ) : (
+                            <NodataMessage message="No trending blogs published" />
                         )}
                     </InPageNavigation>
                 </div>
@@ -162,7 +184,7 @@ const Home = () => {
 
                             {trendingBlogs === null ? (
                                 <Loader />
-                            ) : (
+                            ) : trendingBlogs.length ? (
                                 trendingBlogs.map((blog, index) => (
                                     <AnimationWrapper
                                         key={blog?.blog_id}
@@ -177,6 +199,8 @@ const Home = () => {
                                         />
                                     </AnimationWrapper>
                                 ))
+                            ) : (
+                                <NodataMessage message="No trending blogs published" />
                             )}
                         </div>
                     </div>

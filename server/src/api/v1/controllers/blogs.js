@@ -192,3 +192,32 @@ export const trendingBlogs = async (req, res) => {
             })
         })
 }
+
+export const searchBlog = async (req, res) => {
+    const { tag } = req.body
+
+    const findQuery = { tags: tag, draft: false }
+
+    const maxLimit = 5
+
+    Blog.find(findQuery)
+        .populate(
+            "author",
+            "personal_info.profile_img personal_info.username personal_info.fullName -_id"
+        )
+        .sort({ publishedAt: -1 })
+        .select("blog_id title des banner activity tags publishedAt -_id")
+        .limit(maxLimit)
+        .then((blogs) => {
+            return res.status(200).json({
+                status: 6000,
+                blogs,
+            })
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                status: 6001,
+                message: error?.message,
+            })
+        })
+}

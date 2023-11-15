@@ -20,8 +20,6 @@
 #     "password": "Hello123"
 # }
 
-# accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTEwMjRiODExNDhmZWFkZGYxMzFiMCIsImlhdCI6MTY5OTgwNzgxOX0.n8Dw7Jj_ENMtE3JESLdp6V4V0TaZVfcD9_PM3PSIFTg
-
 
 # ======== Get Upload URL ========
 
@@ -44,6 +42,15 @@
 #     "tags": ["aa", "bb"]
 # }
 
-# =========== Latest Blogs =========
+# =========== Latest Blogs && Trending Blogs =========
 
-GET http://localhost:9001/api/v1/blogs/trending
+# GET http://localhost:9001/api/v1/blogs/trending
+
+# ========= Search Blog =============
+
+POST http://localhost:9001/api/v1/blogs/search
+Content-Type: application/json
+
+{
+    "tag": "hello"
+}

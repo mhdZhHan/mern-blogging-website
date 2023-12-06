@@ -142,6 +142,8 @@ export const createBlog = async (req, res) => {
 }
 
 export const latestBlogs = async (req, res) => {
+    const { page } = req.body
+
     const maxLimit = 5
 
     Blog.find({ draft: false })
@@ -151,11 +153,32 @@ export const latestBlogs = async (req, res) => {
         )
         .sort({ publishedAt: -1 })
         .select("blog_id title des banner activity tags publishedAt -_id")
+        .skip((page - 1) * maxLimit) // skip() will skip documents
         .limit(maxLimit)
         .then((blogs) => {
             return res.status(200).json({
                 status: 6000,
                 blogs,
+            })
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                status: 6001,
+                message: error?.message,
+            })
+        })
+}
+
+export const latestBlogsCount = async (req, res) => {
+    /**
+     * countDocuments() will give the total count of document
+     * present in the collection
+     */
+    Blog.countDocuments({ draft: false })
+        .then((count) => {
+            return res.status(200).json({
+                status: 6000,
+                totalDocs: count,
             })
         })
         .catch((error) => {
@@ -194,7 +217,7 @@ export const trendingBlogs = async (req, res) => {
 }
 
 export const searchBlog = async (req, res) => {
-    const { tag } = req.body
+    const { tag, page } = req.body
 
     const findQuery = { tags: tag, draft: false }
 
@@ -207,11 +230,32 @@ export const searchBlog = async (req, res) => {
         )
         .sort({ publishedAt: -1 })
         .select("blog_id title des banner activity tags publishedAt -_id")
+        .skip((page - 1) * maxLimit)
         .limit(maxLimit)
         .then((blogs) => {
             return res.status(200).json({
                 status: 6000,
                 blogs,
+            })
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                status: 6001,
+                message: error?.message,
+            })
+        })
+}
+
+export const searchBlogsCount = async (req, res) => {
+    const { tag } = req.body
+
+    const findQuery = { tags: tag, draft: false }
+
+    Blog.countDocuments(findQuery)
+        .then((count) => {
+            return res.status(200).json({
+                status: 6000,
+                totalDocs: count,
             })
         })
         .catch((error) => {

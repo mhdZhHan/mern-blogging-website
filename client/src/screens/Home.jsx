@@ -1,6 +1,8 @@
-// components
 import { useEffect, useState } from "react"
 import axios from "axios"
+
+// functions
+import { filterPaginationData } from "../functions"
 
 // components
 import AnimationWrapper from "../components/common/AnimationWrapper"
@@ -11,6 +13,7 @@ import Loader from "../components/common/Loader"
 import BlogCard from "../components/common/cards/BlogCard"
 import MinimalBlogPostCard from "../components/common/cards/MinimalBlogPostCard"
 import NodataMessage from "../components/common/NodataMessage"
+import LoadMoreBtn from "../components/common/buttons/LoadMoreBtn"
 
 const Home = () => {
     const [blogs, setBlogs] = useState(null)
@@ -26,27 +29,45 @@ const Home = () => {
         "new dev",
         "hello",
         "test",
-        "card"
+        "card",
     ]
 
-    const fetchLatestBlogs = () => {
+    const fetchLatestBlogs = ({ page = 1 }) => {
         axios
-            .get(`${import.meta.env.VITE_API_URL}/blogs/latest`)
-            .then(({ data }) => {
-                setBlogs(data?.blogs)
+            .post(`${import.meta.env.VITE_API_URL}/blogs/latest`, { page })
+            .then(async ({ data }) => {
+                // setBlogs(data?.blogs)
+
+                const formateDate = await filterPaginationData({
+                    state: blogs,
+                    data: data?.blogs,
+                    page,
+                    countRoute: "latest/total-posts",
+                })
+
+                setBlogs(formateDate)
             })
             .catch((error) => {
                 console.log(error)
             })
     }
 
-    const fetchBlogsByCategory = () => {
+    const fetchBlogsByCategory = ({ page = 1 }) => {
         axios
             .post(`${import.meta.env.VITE_API_URL}/blogs/search`, {
                 tag: pageState,
+                page,
             })
-            .then(({ data }) => {
-                setBlogs(data?.blogs)
+            .then(async ({ data }) => {
+                const formateDate = await filterPaginationData({
+                    state: blogs,
+                    data: data?.blogs,
+                    page,
+                    countRoute: "search/total-posts",
+                    dataToSend: { tag: pageState },
+                })
+
+                setBlogs(formateDate)
             })
             .catch((error) => {
                 console.log(error)
@@ -72,9 +93,9 @@ const Home = () => {
         activeTabRef.current.click()
 
         if (pageState === "home") {
-            fetchLatestBlogs()
+            fetchLatestBlogs({ page: 1 })
         } else {
-            fetchBlogsByCategory()
+            fetchBlogsByCategory({ page: 1 })
         }
 
         if (!trendingBlogs) {
@@ -105,26 +126,37 @@ const Home = () => {
                         defaultHidden={["trending blogs"]}
                     >
                         {/* latest blogs */}
-                        {blogs === null ? (
-                            <Loader />
-                        ) : blogs.length ? (
-                            blogs.map((blog, index) => (
-                                <AnimationWrapper
-                                    key={blog?.blog_id}
-                                    transition={{
-                                        duration: 1,
-                                        delay: index * 0.1,
-                                    }}
-                                >
-                                    <BlogCard
-                                        blog={blog}
-                                        author={blog?.author?.personal_info}
-                                    />
-                                </AnimationWrapper>
-                            ))
-                        ) : (
-                            <NodataMessage message="No blog published" />
-                        )}
+                        <>
+                            {blogs === null ? (
+                                <Loader />
+                            ) : blogs.results.length ? (
+                                blogs.results.map((blog, index) => (
+                                    <AnimationWrapper
+                                        key={blog?.blog_id}
+                                        transition={{
+                                            duration: 1,
+                                            delay: index * 0.1,
+                                        }}
+                                    >
+                                        <BlogCard
+                                            blog={blog}
+                                            author={blog?.author?.personal_info}
+                                        />
+                                    </AnimationWrapper>
+                                ))
+                            ) : (
+                                <NodataMessage message="No blog published" />
+                            )}
+
+                            <LoadMoreBtn
+                                state={blogs}
+                                fetchDataFunc={
+                                    pageState === "home"
+                                        ? fetchLatestBlogs
+                                        : fetchBlogsByCategory
+                                }
+                            />
+                        </>
 
                         {/* trending blogs only for md devices */}
                         {trendingBlogs === null ? (

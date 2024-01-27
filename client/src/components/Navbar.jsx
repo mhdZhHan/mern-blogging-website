@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react"
-import { Link, Outlet } from "react-router-dom"
+import { Link, Outlet, useNavigate } from "react-router-dom"
 
 import { useStateContext } from "../contexts/GlobalContext"
 
@@ -12,6 +12,8 @@ const Navbar = () => {
     const [searchboxVisibility, setSearchBoxVisibility] = useState(false)
     const [userNavPanel, setUserNavPanel] = useState(false)
 
+    const navigate = useNavigate()
+
     const {
         userData: { access_token, profile_img },
     } = useStateContext()
@@ -21,6 +23,19 @@ const Navbar = () => {
     }
     const handleBlur = () => {
         setTimeout(() => setUserNavPanel(false), 200)
+    }
+
+    // search
+    const handleSearch = (event) => {
+        const query = event.target.value;
+
+        console.log(event);
+
+        if ((event.keyCode === 13) && (query.length)) {
+            navigate(`/search/${query}`)
+            console.log('hello');
+        }
+        
     }
 
     return (
@@ -41,6 +56,7 @@ const Navbar = () => {
                         name=""
                         placeholder="Search"
                         className="w-full md:w-auto bg-grey p-4 pl-6 pr-[12%] md:pr-6 rounded-full placeholder:text-dark-grey md:pl-12"
+                        onKeyDown={handleSearch}
                     />
 
                     <i className="fi fi-rr-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey"></i>

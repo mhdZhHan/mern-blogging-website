@@ -38,14 +38,14 @@ const Home = () => {
             .then(async ({ data }) => {
                 // setBlogs(data?.blogs)
 
-                const formateDate = await filterPaginationData({
+                const formattedDate = await filterPaginationData({
                     state: blogs,
                     data: data?.blogs,
                     page,
                     countRoute: "latest/total-posts",
                 })
 
-                setBlogs(formateDate)
+                setBlogs(formattedDate)
             })
             .catch((error) => {
                 console.log(error)
@@ -59,7 +59,7 @@ const Home = () => {
                 page,
             })
             .then(async ({ data }) => {
-                const formateDate = await filterPaginationData({
+                const formattedDate = await filterPaginationData({
                     state: blogs,
                     data: data?.blogs,
                     page,
@@ -67,7 +67,7 @@ const Home = () => {
                     dataToSend: { tag: pageState },
                 })
 
-                setBlogs(formateDate)
+                setBlogs(formattedDate)
             })
             .catch((error) => {
                 console.log(error)

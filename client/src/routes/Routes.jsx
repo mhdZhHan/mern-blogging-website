@@ -9,6 +9,7 @@ import Navbar from "../components/Navbar"
 import AuthForm from "../screens/AuthForm"
 import Editor from "../screens/Editor"
 import Home from "../screens/Home"
+import Search from "../screens/Search"
 
 const Routes_ = () => {
     return (
@@ -31,6 +32,10 @@ const Routes_ = () => {
                     <Route
                         path="signup"
                         element={<AuthForm type="sign-up" />}
+                    />
+                    <Route
+                        path="search/:query"
+                        element={<Search />}
                     />
                 </Route>
             </Routes>

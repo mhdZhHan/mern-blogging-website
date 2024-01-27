@@ -48,9 +48,19 @@
 
 # ========= Search Blog =============
 
-POST http://localhost:9001/api/v1/blogs/search
+# POST http://localhost:9001/api/v1/blogs/search
+# Content-Type: application/json
+
+# {
+#     "tag": "hello"
+# }
+
+
+# =========== Search Users ============
+
+POST http://localhost:9001/api/v1/users/search
 Content-Type: application/json
 
 {
-    "tag": "hello"
+    "query": "mohammed"
 }

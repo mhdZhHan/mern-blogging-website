@@ -10,11 +10,14 @@ import AnimationWrapper from "../components/common/AnimationWrapper"
 import InPageNavigation from "../components/common/InPageNavigation"
 import Loader from "../components/common/Loader"
 import BlogCard from "../components/common/cards/BlogCard"
+import UserCard from "../components/common/cards/UserCard"
 import NodataMessage from "../components/common/NodataMessage"
 import LoadMoreBtn from "../components/common/buttons/LoadMoreBtn"
 
 const Search = () => {
     const [blogs, setBlogs] = useState(null)
+    const [users, setUsers] = useState(null)
+
     const { query } = useParams()
 
     const searchBlogs = ({ page = 1, createNewArr = false }) => {
@@ -28,7 +31,7 @@ const Search = () => {
                     state: blogs,
                     data: data?.blogs,
                     page,
-                    countRoute: "/search/total-posts",
+                    countRoute: "search/total-posts",
                     dataToSend: { query },
                     createNewArr,
                 })
@@ -37,13 +40,49 @@ const Search = () => {
             })
     }
 
-    useEffect(() => {
-        resetStates()
-        searchBlogs({ page: 1, createNewArr: true })
-    }, [query])
+    const fetchUsers = () => {
+        axios
+            .post(`${import.meta.env.VITE_API_URL}/users/search`, { query })
+            .then(({ data: { users } }) => {
+                setUsers(users)
+            })
+    }
 
     const resetStates = () => {
         setBlogs(null)
+        setUsers(null)
+    }
+
+    useEffect(() => {
+        resetStates()
+        searchBlogs({ page: 1, createNewArr: true })
+        fetchUsers()
+    }, [query])
+
+    const UserCardWrapper = () => {
+        return (
+            <>
+                {users == null ? (
+                    <Loader />
+                ) : users.length ? (
+                    users.map((user, index) => {
+                        return (
+                            <AnimationWrapper
+                                key={index}
+                                transition={{
+                                    duration: 1,
+                                    delay: index * 0.08,
+                                }}
+                            >
+                                <UserCard user={user} />
+                            </AnimationWrapper>
+                        )
+                    })
+                ) : (
+                    <NodataMessage message="No user found" />
+                )}
+            </>
+        )
     }
 
     return (
@@ -77,13 +116,23 @@ const Search = () => {
                         ) : (
                             <NodataMessage message="No blog published" />
                         )}
-                        
+
                         <LoadMoreBtn
                             state={blogs}
                             fetchDataFunc={searchBlogs}
                         />
                     </>
+
+                    <UserCardWrapper />
                 </InPageNavigation>
+            </div>
+
+            <div className="min-w-[40%] lg:min-w-[350px] max-w-min border-l border-grey pl-8 pt-3 max-md:hidden">
+                <h1 className="font-medium text-xl mb-8">
+                    User related to search{" "}
+                    <i className="fi fi-rr-user mt-1"></i>
+                </h1>
+                <UserCardWrapper />
             </div>
         </section>
     )

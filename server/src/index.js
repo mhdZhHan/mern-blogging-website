@@ -11,6 +11,7 @@ import { serviceAccountKey } from "./configs/index.js"
 // routers
 import authRouter from "./api/v1/routes/auth.js"
 import blogsRouter from "./api/v1/routes/blogs.js"
+import usersRouter from "./api/v1/routes/users.js"
 
 const app = express()
 
@@ -29,3 +30,4 @@ admin.initializeApp({
 // routes
 app.use("/api/v1/auth/", authRouter)
 app.use("/api/v1/blogs/", blogsRouter)
+app.use("/api/v1/users/", usersRouter)

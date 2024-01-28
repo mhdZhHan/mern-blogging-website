@@ -15,6 +15,7 @@ import InPageNavigation from "../components/common/InPageNavigation"
 import NodataMessage from "../components/common/NodataMessage"
 import LoadMoreBtn from "../components/common/buttons/LoadMoreBtn"
 import BlogCard from "../components/common/cards/BlogCard"
+import PageNotFound from "./PageNotFound"
 
 export const profileDataStructure = {
     personal_info: {
@@ -35,6 +36,7 @@ const UserProfile = () => {
     const [profile, setProfile] = useState(profileDataStructure)
     const [loading, setLoading] = useState(true)
     const [blogs, setBlogs] = useState(null)
+    const [profileLoaded, setProfileLoaded] = useState("")
 
     const { id: profileId } = useParams()
     const {
@@ -54,8 +56,11 @@ const UserProfile = () => {
                 username: profileId,
             })
             .then(({ data }) => {
-                setProfile(data?.user)
-                getBlogs({ userId: data?.user?._id })
+                if (data?.user != null) {
+                    setProfile(data?.user)
+                    getBlogs({ userId: data?.user?._id })
+                }
+                setProfileLoaded(profileId)
                 setLoading(false)
             })
             .catch((error) => {
@@ -87,20 +92,27 @@ const UserProfile = () => {
     }
 
     useEffect(() => {
-        resetStates()
-        fetchUserProfile()
-    }, [profileId])
+        if (profileId !== profileLoaded) {
+            setBlogs(null)
+        }
+
+        if (blogs === null) {
+            resetStates()
+            fetchUserProfile()
+        }
+    }, [profileId, blogs])
 
     const resetStates = () => {
-        setLoading(true)
         setProfile(profileDataStructure)
+        setLoading(true)
+        setProfileLoaded("")
     }
 
     return (
         <AnimationWrapper>
             {loading ? (
                 <Loader />
-            ) : (
+            ) : username_.length ? (
                 <section className="h-cover md:flex flex-row-reverse items-start gap-5 min-[1100px]:gap-12">
                     <div className="flex flex-col max-md:items-center gap-5 min-w-[250px] md:w-[50%] md:pl-8 md:border-l border-grey md:sticky md:top-[100px] md:py-10">
                         <img
@@ -180,6 +192,8 @@ const UserProfile = () => {
                         </InPageNavigation>
                     </div>
                 </section>
+            ) : (
+                <PageNotFound />
             )}
         </AnimationWrapper>
     )

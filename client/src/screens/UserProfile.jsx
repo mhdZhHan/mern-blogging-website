@@ -7,6 +7,7 @@ import { useStateContext } from "../contexts/GlobalContext"
 // components
 import AnimationWrapper from "../components/common/AnimationWrapper"
 import Loader from "../components/common/Loader"
+import AboutUser from "../components/profile/AboutUser"
 
 export const profileDataStructure = {
     personal_info: {
@@ -94,6 +95,13 @@ const UserProfile = () => {
                                 ""
                             )}
                         </div>
+
+                        <AboutUser
+                            bio={bio}
+                            social_links={social_links}
+                            joinedAt={joinedAt}
+                            className="max-md:hidden"
+                        />
                     </div>
                 </section>
             )}

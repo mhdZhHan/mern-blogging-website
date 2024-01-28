@@ -12,6 +12,7 @@ import Home from "../screens/Home"
 import Search from "../screens/Search"
 import PageNotFound from "../screens/PageNotFound"
 import UserProfile from "../screens/UserProfile"
+import Blog from "../screens/Blog"
 
 const Routes_ = () => {
     return (
@@ -37,6 +38,7 @@ const Routes_ = () => {
                     />
                     <Route path="search/:query" element={<Search />} />
                     <Route path="user/:id" element={<UserProfile />} />
+                    <Route path="blog/:blogId" element={<Blog />} />
                     <Route path="*" element={<PageNotFound />} />
                 </Route>
             </Routes>

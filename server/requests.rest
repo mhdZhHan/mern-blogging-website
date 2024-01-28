@@ -67,9 +67,13 @@
 
 # =========== user profile =========
 
-POST http://localhost:9001/api/v1/users/profile
-Content-Type: application/json
+# POST http://localhost:9001/api/v1/users/profile
+# Content-Type: application/json
 
-{
-    "username": "hello"
-}
+# {
+#     "username": "hello"
+# }
+
+# =========== get blog ============
+
+GET http://localhost:9001/api/v1/blogs/Hello-world6zvdSoCyq1H4s-4gkr9bL

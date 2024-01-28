@@ -216,20 +216,27 @@ export const trendingBlogs = async (req, res) => {
         })
 }
 
-export const searchBlog = async (req, res) => {
-    const { tag, query, author, page } = req.body
+export const searchBlogs = async (req, res) => {
+    /**
+     * $ne: `eliminate_blog` => this will find only blog id not equals to `eliminate_blog`
+     */
+    const { tag, query, author, page, limit, eliminate_blog } = req.body
 
     let findQuery
 
     if (tag) {
-        findQuery = { tags: tag, draft: false }
+        findQuery = {
+            tags: tag,
+            draft: false,
+            blog_id: { $ne: eliminate_blog },
+        }
     } else if (query) {
         findQuery = { draft: false, title: new RegExp(query, "i") }
     } else if (author) {
         findQuery = { author, draft: false }
     }
 
-    const maxLimit = 5
+    const maxLimit = limit ? limit : 2
 
     Blog.find(findQuery)
         .populate(
@@ -272,6 +279,56 @@ export const searchBlogsCount = async (req, res) => {
             return res.status(200).json({
                 status: 6000,
                 totalDocs: count,
+            })
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                status: 6001,
+                message: error?.message,
+            })
+        })
+}
+
+export const getBlog = async (req, res) => {
+    /**
+     * `$inc => incrementing something`
+     */
+
+    const { blog_id } = req.params
+
+    const incrementVal = 1
+
+    Blog.findOneAndUpdate(
+        { blog_id },
+        { $inc: { "activity.total_reads": incrementVal } }
+    )
+        .populate(
+            "author",
+            "personal_info.fullName personal_info.username personal_info.profile_img"
+        )
+        .select("title des content banner activity publishedAt blog_id tags")
+        .then((blog) => {
+            /**
+             * updating the `total_reads` count from the author details
+             *
+             * `findOneAndUpdate` is a promise so should need the catch method.
+             */
+            User.findOneAndUpdate(
+                {
+                    "personal_info.username":
+                        blog.author.personal_info.username,
+                },
+                { $inc: { "account_info.total_reads": incrementVal } }
+            ).catch((error) => {
+                return res.status(500).json({
+                    status: 6001,
+                    message: error?.message,
+                })
+            })
+
+            return res.status(200).json({
+                status: 6000,
+                blog,
             })
         })
         .catch((error) => {

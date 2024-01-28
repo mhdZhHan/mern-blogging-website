@@ -21,3 +21,22 @@ export const searchUsers = async (req, res) => {
             })
         })
 }
+
+export const userProfile = async (req, res) => {
+    const { username } = req.body
+
+    User.findOne({ "personal_info.username": username })
+        .select("-personal_info.password -google_auth -updatedAt -blogs")
+        .then((user) => {
+            res.status(200).json({
+                status: 6000,
+                user,
+            })
+        })
+        .catch((error) => {
+            res.status(500).json({
+                status: 6001,
+                message: error?.message,
+            })
+        })
+}

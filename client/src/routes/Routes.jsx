@@ -10,6 +10,8 @@ import AuthForm from "../screens/AuthForm"
 import Editor from "../screens/Editor"
 import Home from "../screens/Home"
 import Search from "../screens/Search"
+import PageNotFound from "../screens/PageNotFound"
+import UserProfile from "../screens/UserProfile"
 
 const Routes_ = () => {
     return (
@@ -33,10 +35,9 @@ const Routes_ = () => {
                         path="signup"
                         element={<AuthForm type="sign-up" />}
                     />
-                    <Route
-                        path="search/:query"
-                        element={<Search />}
-                    />
+                    <Route path="search/:query" element={<Search />} />
+                    <Route path="user/:id" element={<UserProfile />} />
+                    <Route path="*" element={<PageNotFound />} />
                 </Route>
             </Routes>
         </Router>

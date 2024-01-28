@@ -58,9 +58,18 @@
 
 # =========== Search Users ============
 
-POST http://localhost:9001/api/v1/users/search
+# POST http://localhost:9001/api/v1/users/search
+# Content-Type: application/json
+
+# {
+#     "query": "mohammed"
+# }
+
+# =========== user profile =========
+
+POST http://localhost:9001/api/v1/users/profile
 Content-Type: application/json
 
 {
-    "query": "mohammed"
+    "username": "hello"
 }

@@ -217,7 +217,7 @@ export const trendingBlogs = async (req, res) => {
 }
 
 export const searchBlog = async (req, res) => {
-    const { tag, query, page } = req.body
+    const { tag, query, author, page } = req.body
 
     let findQuery
 
@@ -225,9 +225,11 @@ export const searchBlog = async (req, res) => {
         findQuery = { tags: tag, draft: false }
     } else if (query) {
         findQuery = { draft: false, title: new RegExp(query, "i") }
+    } else if (author) {
+        findQuery = { author, draft: false }
     }
 
-    const maxLimit = 2
+    const maxLimit = 5
 
     Blog.find(findQuery)
         .populate(
@@ -253,7 +255,7 @@ export const searchBlog = async (req, res) => {
 }
 
 export const searchBlogsCount = async (req, res) => {
-    const { tag, query } = req.body
+    const { tag, author, query } = req.body
 
     let findQuery
 
@@ -261,6 +263,8 @@ export const searchBlogsCount = async (req, res) => {
         findQuery = { tags: tag, draft: false }
     } else if (query) {
         findQuery = { draft: false, title: new RegExp(query, "i") }
+    } else if (author) {
+        findQuery = { author, draft: false }
     }
 
     Blog.countDocuments(findQuery)

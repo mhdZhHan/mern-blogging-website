@@ -2,8 +2,8 @@ import { useContext } from "react"
 import { Link } from "react-router-dom"
 
 // contexts
-import { useStateContext } from "../contexts/GlobalContext"
-import { BlogContext } from "./Blog"
+import { useStateContext } from "../../contexts/GlobalContext"
+import { BlogContext } from "../../screens/Blog"
 
 const BlogInteraction = () => {
     const {

@@ -8,8 +8,9 @@ import { getDate } from "../utils/getDate"
 // components
 import AnimationWrapper from "../components/common/AnimationWrapper"
 import Loader from "../components/common/Loader"
-import BlogInteraction from "./BlogInteraction"
+import BlogInteraction from "../components/blog/BlogInteraction"
 import BlogCard from "../components/common/cards/BlogCard"
+import BlogContent from "../components/blog/BlogContent"
 
 export const blogStructure = {
     title: "",
@@ -125,7 +126,15 @@ const Blog = () => {
                         </div>
 
                         <BlogInteraction />
-                        {/* blog content */}
+
+                        <div className="my-12 font-gelasio blog-page-content">
+                            {content[0].blocks.map((block, index) => (
+                                <div key={index} className="my-4 md:my-8">
+                                    <BlogContent block={block} />
+                                </div>
+                            ))}
+                        </div>
+
                         <BlogInteraction />
 
                         {similarBlogs !== null && similarBlogs.length ? (

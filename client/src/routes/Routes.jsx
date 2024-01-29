@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 
-import PrivateRoute from "./PrivateRoute"
-
 // components
 import Navbar from "../components/Navbar"
 
@@ -18,14 +16,8 @@ const Routes_ = () => {
     return (
         <Router>
             <Routes>
-                <Route
-                    path="/editor"
-                    element={
-                        <PrivateRoute>
-                            <Editor />
-                        </PrivateRoute>
-                    }
-                />
+                <Route path="/editor" element={<Editor />} />
+                <Route path="/editor/:blogId" element={<Editor />} />
                 <Route path="/" element={<Navbar />}>
                     <Route index element={<Home />} />
                     <Route

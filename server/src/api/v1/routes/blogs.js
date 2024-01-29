@@ -27,6 +27,6 @@ router.post("/latest/total-posts", latestBlogsCount)
 
 router.get("/trending", trendingBlogs)
 
-router.get("/:blog_id", getBlog)
+router.post("/get-blog", getBlog)
 
 export default router

@@ -1,10 +1,12 @@
+import { useContext } from "react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Toaster, toast } from "react-hot-toast"
 
 // contexts
-import { useEditorContext } from "../../contexts/EditorContext"
 import { useStateContext } from "../../contexts/GlobalContext"
+import { EditorContext } from "../../screens/Editor"
+
 // components
 import AnimationWrapper from "../common/AnimationWrapper"
 import Tag from "./Tag"
@@ -19,11 +21,13 @@ const PublishForm = ({ setEditorState }) => {
         blog,
         blog: { banner, title, content, des, tags, draft },
         setBlog,
-    } = useEditorContext()
+    } = useContext(EditorContext)
 
     const {
         userData: { access_token },
     } = useStateContext()
+
+    const { blogId } = useParams()
 
     const handleClose = () => {
         setEditorState("editor")
@@ -94,11 +98,15 @@ const PublishForm = ({ setEditorState }) => {
 
         // send data to server
         axios
-            .post(`${import.meta.env.VITE_API_URL}/blogs/create`, blogDate, {
-                headers: {
-                    Authorization: `Bearer ${access_token}`,
-                },
-            })
+            .post(
+                `${import.meta.env.VITE_API_URL}/blogs/create`,
+                { ...blogDate, id: blogId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                }
+            )
             .then((response) => {
                 event.target.classList.remove("disable")
                 toast.dismiss(loadingToast)

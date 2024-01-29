@@ -1,12 +1,14 @@
+import { useContext } from "react"
+
 // contexts
-import { useEditorContext } from "../../contexts/EditorContext"
+import { EditorContext } from "../../screens/Editor"
 
 const Tag = ({ tag, tagIndex }) => {
     const {
         blog: { tags },
         blog,
         setBlog,
-    } = useEditorContext()
+    } = useContext(EditorContext)
 
     const handleContentEditable = (event) => {
         event.target.setAttribute("contentEditable", true)
@@ -34,7 +36,11 @@ const Tag = ({ tag, tagIndex }) => {
 
     return (
         <div className="relative p-2 mt-2 mr-2 px-5 bg-white rounded-full inline-block hover:bg-opacity-50 pr-10">
-            <p className="outline-none" onKeyDown={handleTagEdit} onClick={handleContentEditable}>
+            <p
+                className="outline-none"
+                onKeyDown={handleTagEdit}
+                onClick={handleContentEditable}
+            >
                 {tag}
             </p>
             <button

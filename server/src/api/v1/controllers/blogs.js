@@ -40,9 +40,13 @@ export const getUploadUrl = async (req, res) => {
 }
 
 export const createBlog = async (req, res) => {
+    /**
+     * id => blogId from the frontend
+     */
+
     const authorId = req.user
 
-    let { title, content, des, tags, banner, draft } = req?.body
+    let { title, content, des, tags, banner, draft, id } = req?.body
 
     if (!title) {
         return res.status(403).json({
@@ -87,58 +91,79 @@ export const createBlog = async (req, res) => {
 
     // slugify the title + unique id
     const blog_id =
+        id ||
         title
             .replace(/[^a-zA-Z0-9]/g, " ")
             .replace(/\s+/g, "-")
             .trim() + nanoid()
 
-    const blog = new Blog({
-        title,
-        des,
-        content,
-        tags,
-        banner,
-        author: authorId,
-        blog_id,
-        draft: Boolean(draft), // the boolean() will helps set correct value
-    })
-
-    blog.save()
-        .then((blog) => {
-            let incrementVal = draft ? 0 : 1
-
-            /**
-             * update the User model to
-             * increment the total_posts count and
-             * push the new blog post int user blogs
-             */
-            User.findOneAndUpdate(
-                { _id: authorId },
-                {
-                    $inc: { "account_info.total_posts": incrementVal },
-                    $push: { blogs: blog._id },
-                }
-            )
-                .then((user) => {
-                    res.status(200).json({
-                        status: 6000,
-                        message: "Successfully created",
-                        blogId: blog.blog_id,
-                    })
+    if (id) {
+        Blog.findOneAndUpdate(
+            { blog_id },
+            { title, des, banner, content, tags, draft: draft ? draft : false }
+        )
+            .then(() => {
+                res.status(200).json({
+                    status: 6000,
+                    message: "Successfully updated",
+                    blogId: blog_id,
                 })
-                .catch((error) => {
-                    res.status(500).json({
-                        status: 6001,
-                        message: "Failed to update the total post count",
-                    })
-                })
-        })
-        .catch((error) => {
-            return res.status(500).json({
-                status: 6001,
-                message: error?.message,
             })
+            .catch((error) => {
+                res.status(500).json({
+                    status: 6001,
+                    message: error?.message,
+                })
+            })
+    } else {
+        const blog = new Blog({
+            title,
+            des,
+            content,
+            tags,
+            banner,
+            author: authorId,
+            blog_id,
+            draft: Boolean(draft), // the boolean() will helps set correct value
         })
+
+        blog.save()
+            .then((blog) => {
+                let incrementVal = draft ? 0 : 1
+
+                /**
+                 * update the User model to
+                 * increment the total_posts count and
+                 * push the new blog post int user blogs
+                 */
+                User.findOneAndUpdate(
+                    { _id: authorId },
+                    {
+                        $inc: { "account_info.total_posts": incrementVal },
+                        $push: { blogs: blog._id },
+                    }
+                )
+                    .then((user) => {
+                        res.status(200).json({
+                            status: 6000,
+                            message: "Successfully created",
+                            blogId: blog.blog_id,
+                        })
+                    })
+                    .catch((error) => {
+                        res.status(500).json({
+                            status: 6001,
+                            message: "Failed to update the total post count",
+                        })
+                    })
+            })
+            .catch((error) => {
+                return res.status(500).json({
+                    status: 6001,
+                    message: error?.message,
+                })
+            })
+    }
 }
 
 export const latestBlogs = async (req, res) => {
@@ -294,9 +319,9 @@ export const getBlog = async (req, res) => {
      * `$inc => incrementing something`
      */
 
-    const { blog_id } = req.params
+    const { blog_id, draft, mode } = req.body
 
-    const incrementVal = 1
+    const incrementVal = mode !== "edit" ? 1 : 0
 
     Blog.findOneAndUpdate(
         { blog_id },
@@ -325,6 +350,13 @@ export const getBlog = async (req, res) => {
                     message: error?.message,
                 })
             })
+
+            if (blog.draft && !draft) {
+                return res.status(500).json({
+                    status: 6001,
+                    message: "You can not access draft blogs",
+                })
+            }
 
             return res.status(200).json({
                 status: 6000,

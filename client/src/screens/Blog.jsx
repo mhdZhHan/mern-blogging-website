@@ -43,7 +43,9 @@ const Blog = () => {
 
     const fetchBlog = () => {
         axios
-            .get(`${import.meta.env.VITE_API_URL}/blogs/${blogId}`)
+            .post(`${import.meta.env.VITE_API_URL}/blogs/get-blog`, {
+                blog_id: blogId,
+            })
             .then(({ data }) => {
                 setBlog(data?.blog)
 

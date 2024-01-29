@@ -1,13 +1,13 @@
-import { Fragment, useEffect } from "react"
+import { Fragment, useEffect, useContext } from "react"
 import axios from "axios"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { Toaster, toast } from "react-hot-toast"
 import Editorjs from "@editorjs/editorjs"
 
 // contexts
-import { useEditorContext } from "../../contexts/EditorContext"
 import { useStateContext } from "../../contexts/GlobalContext"
+import { EditorContext } from "../../screens/Editor"
 
 // components
 import AnimationWrapper from "../common/AnimationWrapper"
@@ -28,11 +28,13 @@ const BlogEditor = ({ setEditorState }) => {
         setBlog,
         textEditor,
         setTextEditor,
-    } = useEditorContext()
+    } = useContext(EditorContext)
 
     const {
         userData: { access_token },
     } = useStateContext()
+
+    const { blogId } = useParams()
 
     useEffect(() => {
         // setTextEditor state will helps to avoid the multiple editor rendering
@@ -40,7 +42,7 @@ const BlogEditor = ({ setEditorState }) => {
             setTextEditor(
                 new Editorjs({
                     holder: "textEditor",
-                    data: content,
+                    data: Array.isArray(content) ? content[0] : content,
                     tools: tools,
                     placeholder: "Let's write your blog",
                 })
@@ -155,7 +157,7 @@ const BlogEditor = ({ setEditorState }) => {
                     axios
                         .post(
                             `${import.meta.env.VITE_API_URL}/blogs/create`,
-                            blogDate,
+                            { ...blogDate, id: blogId },
                             {
                                 headers: {
                                     Authorization: `Bearer ${access_token}`,

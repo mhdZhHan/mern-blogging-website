@@ -76,4 +76,8 @@
 
 # =========== get blog ============
 
-GET http://localhost:9001/api/v1/blogs/Hello-world6zvdSoCyq1H4s-4gkr9bL
+POST http://localhost:9001/api/v1/blogs/get-blog
+
+{
+    "blog_id": "10-Essential-JavaScript-Concepts-Every-Developer-Should-KnowhYGDn1A4izUxVFeM0gcoa"
+}

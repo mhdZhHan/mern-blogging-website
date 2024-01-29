@@ -11,6 +11,8 @@ import {
     latestBlogsCount,
     searchBlogsCount,
     getBlog,
+    likeBlog,
+    isUserLiked,
 } from "../controllers/blogs.js"
 
 const router = express.Router()
@@ -21,12 +23,13 @@ router.post("/create", verifyJWT, createBlog)
 router.post("/search", searchBlogs)
 router.post("/search/total-posts", searchBlogsCount)
 
-
 router.post("/latest", latestBlogs)
 router.post("/latest/total-posts", latestBlogsCount)
 
 router.get("/trending", trendingBlogs)
 
 router.post("/get-blog", getBlog)
+router.post("/like-blog", verifyJWT, likeBlog)
+router.post("/is-user-liked", verifyJWT, isUserLiked)
 
 export default router

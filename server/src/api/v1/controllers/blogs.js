@@ -3,6 +3,7 @@ import { nanoid } from "nanoid"
 // models
 import Blog from "../../../models/Blog.js"
 import User from "../../../models/User.js"
+import Notification from "../../../models/Notification.js"
 
 // configs
 import { s3 } from "../../../configs/index.js"
@@ -361,6 +362,78 @@ export const getBlog = async (req, res) => {
             return res.status(200).json({
                 status: 6000,
                 blog,
+            })
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                status: 6001,
+                message: error?.message,
+            })
+        })
+}
+
+export const likeBlog = async (req, res) => {
+    const user_id = req.user
+
+    const { _id, isUserLiked } = req.body
+
+    const incrementVal = !isUserLiked ? 1 : -1
+
+    Blog.findOneAndUpdate(
+        { _id },
+        { $inc: { "activity.total_likes": incrementVal } }
+    ).then((blog) => {
+        if (!isUserLiked) {
+            const like = new Notification({
+                type: "like",
+                blog: _id,
+                notification_for: blog.author,
+                user: user_id,
+            })
+
+            like.save().then((notification) => {
+                return res.status(200).json({
+                    status: 6000,
+                    liked_by_user: true,
+                })
+            })
+        } else {
+            Notification.findOneAndDelete({
+                user: user_id,
+                blog: _id,
+                type: "like",
+            })
+                .then((data) => {
+                    return res.status(200).json({
+                        status: 6000,
+                        liked_by_user: false,
+                    })
+                })
+                .catch((error) => {
+                    return res.status(500).json({
+                        status: 6001,
+                        message: error?.message,
+                    })
+                })
+        }
+    })
+}
+
+export const isUserLiked = async (req, res) => {
+    /**
+     * request for sending information about currently logged
+     * user is liked the blog post or not
+     */
+
+    const user_id = req.user
+
+    const { _id } = req.body
+
+    Notification.exists({ user: user_id, type: "like", blog: _id })
+        .then((result) => {
+            return res.status(200).json({
+                status: 6000,
+                result,
             })
         })
         .catch((error) => {

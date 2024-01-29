@@ -27,6 +27,7 @@ const Blog = () => {
     const [blog, setBlog] = useState(blogStructure)
     const [loading, setLoading] = useState(true)
     const [similarBlogs, setSimilarBlogs] = useState(null)
+    const [isUserLiked, setIsUserLiked] = useState(false)
 
     const { blogId } = useParams()
 
@@ -90,7 +91,9 @@ const Blog = () => {
             {loading ? (
                 <Loader />
             ) : (
-                <BlogContext.Provider value={{ blog, setBlog }}>
+                <BlogContext.Provider
+                    value={{ blog, setBlog, isUserLiked, setIsUserLiked }}
+                >
                     <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
                         <img
                             src={banner}

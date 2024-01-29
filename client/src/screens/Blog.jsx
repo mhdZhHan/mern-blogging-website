@@ -29,6 +29,11 @@ const Blog = () => {
     const [similarBlogs, setSimilarBlogs] = useState(null)
     const [isUserLiked, setIsUserLiked] = useState(false)
 
+    // comments
+    const [isCommentsWrapper, setIsCommentsWrapper] = useState(true)
+    const [totalParentCommentsLoaded, setTotalParentCommentsLoaded] =
+        useState(0)
+
     const { blogId } = useParams()
 
     const {

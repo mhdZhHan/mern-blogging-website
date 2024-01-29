@@ -8,11 +8,12 @@ import InlineCode from "@editorjs/inline-code"
 
 // functions
 import { uploadImage } from "../../functions/aws"
+import { getSession } from "../../functions/session"
 
-const uploadImageByUrl = (event) => {
+const uploadImageByUrl = (img) => {
     const link = new Promise((resolve, reject) => {
         try {
-            resolve(event)
+            resolve(img)
         } catch (error) {
             reject(error)
         }
@@ -26,8 +27,10 @@ const uploadImageByUrl = (event) => {
     })
 }
 
-const uploadImageByFile = (event) => {
-    return uploadImage(event).then((url) => {
+const uploadImageByFile = (img) => {
+    const { access_token } = JSON.parse(getSession("user"))
+
+    return uploadImage(img, access_token).then((url) => {
         if (url) {
             return {
                 success: 1,

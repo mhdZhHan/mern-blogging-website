@@ -29,6 +29,7 @@ router.post("/latest/total-posts", latestBlogsCount)
 router.get("/trending", trendingBlogs)
 
 router.post("/get-blog", getBlog)
+
 router.post("/like-blog", verifyJWT, likeBlog)
 router.post("/is-user-liked", verifyJWT, isUserLiked)
 

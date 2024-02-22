@@ -12,6 +12,7 @@ import { serviceAccountKey } from "./configs/index.js"
 import authRouter from "./api/v1/routes/auth.js"
 import blogsRouter from "./api/v1/routes/blogs.js"
 import usersRouter from "./api/v1/routes/users.js"
+import commentsRouter from "./api/v1/routes/comments.js"
 
 const app = express()
 
@@ -31,3 +32,4 @@ admin.initializeApp({
 app.use("/api/v1/auth/", authRouter)
 app.use("/api/v1/blogs/", blogsRouter)
 app.use("/api/v1/users/", usersRouter)
+app.use("/api/v1/comments/", commentsRouter)

@@ -11,6 +11,9 @@ import Loader from "../components/common/Loader"
 import BlogInteraction from "../components/blog/BlogInteraction"
 import BlogCard from "../components/common/cards/BlogCard"
 import BlogContent from "../components/blog/BlogContent"
+import CommentsContainer, {
+    fetchComments,
+} from "../components/blog/CommentsContainer"
 
 export const blogStructure = {
     title: "",
@@ -52,15 +55,22 @@ const Blog = () => {
             .post(`${import.meta.env.VITE_API_URL}/blogs/get-blog`, {
                 blog_id: blogId,
             })
-            .then(({ data }) => {
-                setBlog(data?.blog)
+            .then(async ({ data: { blog } }) => {
+                /**
+                 * NOTE fetching comments and adding the comments to the blog response data
+                 */
+                blog.comments = await fetchComments({
+                    blog_id: blog._id,
+                    setParentCommentCountFunc: setTotalParentCommentsLoaded,
+                })
+
+                setBlog(blog)
 
                 /**
                  * get similar blogs related to first tag
                  *
                  * eliminate_blog => remove the current opened blog from the recommendation
                  */
-
                 axios
                     .post(`${import.meta.env.VITE_API_URL}/blogs/search`, {
                         tag: tags[0],
@@ -69,7 +79,6 @@ const Blog = () => {
                     })
                     .then(({ data }) => {
                         setSimilarBlogs(data?.blogs)
-                        console.log(data?.blogs)
                     })
 
                 setLoading(false)
@@ -89,6 +98,10 @@ const Blog = () => {
         setBlog(blogStructure)
         setSimilarBlogs(null)
         setLoading(true)
+
+        setIsUserLiked(false)
+        setIsCommentsWrapper(false)
+        setTotalParentCommentsLoaded(0)
     }
 
     return (
@@ -97,8 +110,19 @@ const Blog = () => {
                 <Loader />
             ) : (
                 <BlogContext.Provider
-                    value={{ blog, setBlog, isUserLiked, setIsUserLiked }}
+                    value={{
+                        blog,
+                        setBlog,
+                        isUserLiked,
+                        setIsUserLiked,
+                        isCommentsWrapper,
+                        setIsCommentsWrapper,
+                        totalParentCommentsLoaded,
+                        setTotalParentCommentsLoaded,
+                    }}
                 >
+                    <CommentsContainer />
+
                     <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
                         <img
                             src={banner}

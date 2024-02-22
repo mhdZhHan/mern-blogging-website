@@ -23,6 +23,7 @@ const BlogInteraction = () => {
         setBlog,
         isUserLiked,
         setIsUserLiked,
+        setIsCommentsWrapper,
     } = useContext(BlogContext)
 
     const {
@@ -44,9 +45,9 @@ const BlogInteraction = () => {
                 )
                 .then(({ data }) => {
                     /**
-                     * if the user will liked it will give an object 
+                     * if the user will liked it will give an object
                      * otherwise give an empty {} object
-                     * 
+                     *
                      * so convert the `data.result` into boolean and `setIsUserLiked()`
                      */
                     setIsUserLiked(Boolean(data?.result))
@@ -112,7 +113,12 @@ const BlogInteraction = () => {
                     </button>
                     <p className="text-xl text-dark-grey">{total_likes}</p>
 
-                    <button className="w-10 h-10 rounded-full flex items-center justify-center bg-grey/80">
+                    <button
+                        className="w-10 h-10 rounded-full flex items-center justify-center bg-grey/80"
+                        onClick={() =>
+                            setIsCommentsWrapper((prevVal) => !prevVal)
+                        }
+                    >
                         <i className="fi fi-rr-comment-dots"></i>
                     </button>
                     <p className="text-xl text-dark-grey">{total_comments}</p>

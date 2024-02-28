@@ -157,22 +157,25 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 		removeCommentsCard(index + 1)
 	}
 
-	const loadReplies = ({ skip = 0 }) => {
-		if (children.length) {
+	const loadReplies = ({ skip = 0, currentIndex = index }) => {
+		if (commentsArray[currentIndex].children.length) {
 			hideReplies()
 
 			axios
 				.post(`${import.meta.env.VITE_API_URL}/comments/get/replies`, {
-					_id,
+					_id: commentsArray[currentIndex]._id,
 					skip,
 				})
 				.then(({ data: { replies } }) => {
-					commentData.isReplyLoaded = true
+					console.log(replies)
+
+					commentsArray[currentIndex].isReplyLoaded = true
 
 					for (let i = 0; i < replies.length; i++) {
-						replies[i].childrenLevel = commentData.childrenLevel + 1
+						replies[i].childrenLevel =
+							commentsArray[currentIndex].childrenLevel + 1
 						commentsArray.splice(
-							index + 1 + i + skip,
+							currentIndex + 1 + i + skip,
 							0,
 							replies[i]
 						)
@@ -186,6 +189,36 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 				.catch((error) => {
 					console.log(error)
 				})
+		}
+	}
+
+	//ANCHOR Components
+
+	const LoadMoreRepliesButton = () => {
+		let parentIndex = getParentIndex()
+
+		// console.log(commentsArray[index + 1].childrenLevel);
+		console.log(commentsArray[index].childrenLevel);
+
+		if (commentsArray[index + 1]) {
+			if (
+				commentsArray[index + 1].childrenLevel <
+				commentsArray[index].childrenLevel
+			) {
+				return (
+					<button
+						className="text-dark-grey p-2 px-3 hover:bg-grey/30 rounded-md flex items-center gap-2"
+						onClick={() =>
+							loadReplies({
+								skip: index - parentIndex,
+								currentIndex: parentIndex,
+							})
+						}
+					>
+						Load More Replies
+					</button>
+				)
+			}
 		}
 	}
 
@@ -251,6 +284,8 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 					</div>
 				)}
 			</div>
+
+			<LoadMoreRepliesButton />
 		</div>
 	)
 }

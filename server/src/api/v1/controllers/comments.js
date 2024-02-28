@@ -164,7 +164,7 @@ export const getReplies = async (req, res) => {
 
 function deleteComments(_id) {
 	Comment.findOneAndDelete({ _id }).then((comment) => {
-		if (comment.parent) {
+		if (comment && comment.parent) {
 			Comment.findOneAndUpdate(
 				{ id: comment.parent },
 				{ $pull: { children: _id } }
@@ -182,16 +182,16 @@ function deleteComments(_id) {
 		)
 
 		Blog.findOneAndUpdate(
-			{ _id: comment.blog_id },
+			{ _id: comment?.blog_id },
 			{
 				$pull: { comments: _id },
 				$inc: { "activity.total_comments": -1 },
-				"activity.total_parent_comments": comment.parent ? 0 : -1,
+				"activity.total_parent_comments": comment?.parent ? 0 : -1,
 			}
 		)
 			.then((blog) => {
-				if (comment.children.length) {
-					comment.children.map((replies) => {
+				if (comment?.children.length) {
+					comment?.children.map((replies) => {
 						deleteComments(replies)
 					})
 				}
@@ -208,10 +208,7 @@ export const deleteComment = async (req, res) => {
 	const { _id } = req.body
 
 	Comment.findOne({ _id }).then((comment) => {
-		if (
-			user_id == comment.commented_by ||
-			user_id == comment.blog_author
-		) {
+		if (user_id == comment.commented_by || user_id == comment.blog_author) {
 			deleteComments(_id)
 
 			return res.status(200).json({

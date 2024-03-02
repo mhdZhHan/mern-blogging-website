@@ -12,13 +12,13 @@
 
 # ======== Signin ========
 
-# POST http://localhost:9001/api/v1/auth/signin
-# Content-Type: application/json
+POST http://localhost:9001/api/v1/auth/signin
+Content-Type: application/json
 
-# {
-#     "email": "liviya@example.com",
-#     "password": "Hello123"
-# }
+{
+    "email": "liviya@example.com",
+    "password": "HelloWorld123"
+}
 
 
 # ======== Get Upload URL ========
@@ -76,8 +76,20 @@
 
 # =========== get blog ============
 
-POST http://localhost:9001/api/v1/blogs/get-blog
+# POST http://localhost:9001/api/v1/blogs/get-blog
 
-{
-    "blog_id": "10-Essential-JavaScript-Concepts-Every-Developer-Should-KnowhYGDn1A4izUxVFeM0gcoa"
-}
+# {
+#     "blog_id": "10-Essential-JavaScript-Concepts-Every-Developer-Should-KnowhYGDn1A4izUxVFeM0gcoa"
+# }
+
+
+# ======== Change Password ========
+
+# POST http://localhost:9001/api/v1/auth/change-password
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTEwMjRiODExNDhmZWFkZGYxMzFiMCIsImlhdCI6MTcwOTM1NDQ0Nn0.siWd4rD1FoRyp-QNLkPmth0njtORd5MyPaNJI_uigxA
+
+# {
+#     "currentPassword": "Hello123",
+#     "newPassword": "HelloWorld123"  
+# }

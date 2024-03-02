@@ -12,6 +12,8 @@ import PageNotFound from "../screens/PageNotFound"
 import UserProfile from "../screens/UserProfile"
 import Blog from "../screens/Blog"
 import SideNav from "../components/settings/SideNav"
+import ChangePassword from "../screens/ChangePassword"
+import EditProfile from "../screens/EditProfile"
 
 const Routes_ = () => {
 	return (
@@ -22,9 +24,12 @@ const Routes_ = () => {
 				<Route path="/" element={<Navbar />}>
 					<Route index element={<Home />} />
 					<Route path="settings" element={<SideNav />}>
-                        <Route path="edit-profile" element={<h1>Hello</h1>} />
-                        <Route path="change-password" element={<h1>Helllllo</h1>} />
-                    </Route>
+						<Route path="edit-profile" element={<EditProfile />} />
+						<Route
+							path="change-password"
+							element={<ChangePassword />}
+						/>
+					</Route>
 					<Route
 						path="signin"
 						element={<AuthForm type="sign-in" />}

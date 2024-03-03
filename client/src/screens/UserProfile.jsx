@@ -129,7 +129,7 @@ const UserProfile = () => {
                         <div className="flex gap-4 mt-2">
                             {profileId === username ? (
                                 <Link
-                                    to="settings/edit-profile"
+                                    to="/settings/edit-profile"
                                     className="btn-light rounded-md"
                                 >
                                     Edit Profile

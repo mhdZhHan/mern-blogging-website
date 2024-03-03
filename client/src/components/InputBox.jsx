@@ -1,12 +1,13 @@
 import { useState } from "react"
 
-const InputBox = ({ name, type, id, value, placeholder, icon }) => {
+const InputBox = ({ name, type, id, value, placeholder, icon, disable = false }) => {
     const [passwordToggle, setPasswordToggle] = useState(false)
 
     return (
         <div className="relative w-[100%] mb-4">
             <input
                 className="input-box"
+                disabled={disable}
                 type={type === 'password' ? passwordToggle ? "text" : "password" : type}
                 name={name}
                 placeholder={placeholder}

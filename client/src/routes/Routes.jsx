@@ -15,6 +15,7 @@ import SideNav from "../components/settings/SideNav"
 import ChangePassword from "../screens/ChangePassword"
 import EditProfile from "../screens/EditProfile"
 import Notifications from "../screens/Notifications"
+import ManageBlogs from "../screens/ManageBlogs"
 
 const Routes_ = () => {
 	return (
@@ -28,6 +29,10 @@ const Routes_ = () => {
 						<Route
 							path="notifications"
 							element={<Notifications />}
+						/>
+						<Route
+							path="blogs"
+							element={<ManageBlogs />}
 						/>
 					</Route>
 					<Route path="settings" element={<SideNav />}>

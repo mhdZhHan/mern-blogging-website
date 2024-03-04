@@ -107,5 +107,5 @@
 
 # ======== Get notifications ========
 
-GET http://localhost:9001/api/v1/notification/new
+GET http://localhost:9001/api/v1/notifications/new
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NDYzMDQ0ZGQxODI1ODc4YTI4ZjEyZSIsImlhdCI6MTcwOTUzMTIyNX0.o7-AuZi28nc8UzvQWElXZ-rUMGBzz0a6P-q6lsLNfRU

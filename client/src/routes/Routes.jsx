@@ -14,6 +14,7 @@ import Blog from "../screens/Blog"
 import SideNav from "../components/settings/SideNav"
 import ChangePassword from "../screens/ChangePassword"
 import EditProfile from "../screens/EditProfile"
+import Notifications from "../screens/Notifications"
 
 const Routes_ = () => {
 	return (
@@ -23,6 +24,12 @@ const Routes_ = () => {
 				<Route path="/editor/:blogId" element={<Editor />} />
 				<Route path="/" element={<Navbar />}>
 					<Route index element={<Home />} />
+					<Route path="dashboard" element={<SideNav />}>
+						<Route
+							path="notifications"
+							element={<Notifications />}
+						/>
+					</Route>
 					<Route path="settings" element={<SideNav />}>
 						<Route path="edit-profile" element={<EditProfile />} />
 						<Route

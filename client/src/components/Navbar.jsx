@@ -43,7 +43,7 @@ const Navbar = () => {
 	useEffect(() => {
 		if (access_token) {
 			axios
-				.get(`${import.meta.env.VITE_API_URL}/notification/new`, {
+				.get(`${import.meta.env.VITE_API_URL}/notifications/new`, {
 					headers: {
 						Authorization: `Bearer ${access_token}`,
 					},
@@ -100,7 +100,7 @@ const Navbar = () => {
 
 					{access_token ? (
 						<>
-							<Link to="/dashboard/notification">
+							<Link to="/dashboard/notifications">
 								<button className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/20">
 									<i className="fi fi-rr-bell text-2xl block mt-1"></i>
 									{new_notification_available && (

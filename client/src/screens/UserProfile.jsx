@@ -82,7 +82,7 @@ const UserProfile = () => {
                     state: blogs,
                     data: data?.blogs,
                     page,
-                    countRoute: "search/total-posts",
+                    countRoute: "blogs/search/total-posts",
                     dataToSend: { author: userId },
                 })
 

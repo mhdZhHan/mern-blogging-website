@@ -89,7 +89,7 @@ const SideNav = () => {
 						</NavLink>
 						<NavLink
 							className="sidebar-link"
-							to="/notifications"
+							to="/dashboard/notifications"
 							onClick={(e) => setPage(e.target.innerText)}
 						>
 							<div className="relative">

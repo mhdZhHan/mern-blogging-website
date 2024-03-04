@@ -42,7 +42,7 @@ const Home = () => {
                     state: blogs,
                     data: data?.blogs,
                     page,
-                    countRoute: "latest/total-posts",
+                    countRoute: "blogs/latest/total-posts",
                 })
 
                 setBlogs(formattedData)
@@ -63,7 +63,7 @@ const Home = () => {
                     state: blogs,
                     data: data?.blogs,
                     page,
-                    countRoute: "search/total-posts",
+                    countRoute: "blogs/search/total-posts",
                     dataToSend: { tag: pageState },
                 })
 

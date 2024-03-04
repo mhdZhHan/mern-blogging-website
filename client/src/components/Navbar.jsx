@@ -1,5 +1,6 @@
-import { Fragment, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { Link, Outlet, useNavigate } from "react-router-dom"
+import axios from "axios"
 
 import { useStateContext } from "../contexts/GlobalContext"
 
@@ -9,116 +10,140 @@ import { logo } from "../assets"
 import UserNavigationPanel from "./UserNavigationPanel"
 
 const Navbar = () => {
-    const [searchboxVisibility, setSearchBoxVisibility] = useState(false)
-    const [userNavPanel, setUserNavPanel] = useState(false)
+	const [searchboxVisibility, setSearchBoxVisibility] = useState(false)
+	const [userNavPanel, setUserNavPanel] = useState(false)
 
-    const navigate = useNavigate()
+	const navigate = useNavigate()
 
-    const {
-        userData: { access_token, profile_img },
-    } = useStateContext()
+	const {
+		userData,
+		userData: { access_token, profile_img, new_notification_available },
+		updateUserData,
+	} = useStateContext()
 
-    const handleUserNavPanel = () => {
-        setUserNavPanel((current) => !current)
-    }
-    const handleBlur = () => {
-        setTimeout(() => setUserNavPanel(false), 200)
-    }
+	const handleUserNavPanel = () => {
+		setUserNavPanel((current) => !current)
+	}
+	const handleBlur = () => {
+		setTimeout(() => setUserNavPanel(false), 200)
+	}
 
-    // search
-    const handleSearch = (event) => {
-        const query = event.target.value;
+	// search
+	const handleSearch = (event) => {
+		const query = event.target.value
 
-        console.log(event);
+		console.log(event)
 
-        if ((event.keyCode === 13) && (query.length)) {
-            navigate(`/search/${query}`)
-            console.log('hello');
-        }
-        
-    }
+		if (event.keyCode === 13 && query.length) {
+			navigate(`/search/${query}`)
+			console.log("hello")
+		}
+	}
 
-    return (
-        <Fragment>
-            <nav className="navbar z-50">
-                <Link to="/" className="flex-none w-10">
-                    <img src={logo} alt="logo" className="w-full" />
-                </Link>
+	useEffect(() => {
+		if (access_token) {
+			axios
+				.get(`${import.meta.env.VITE_API_URL}/notification/new`, {
+					headers: {
+						Authorization: `Bearer ${access_token}`,
+					},
+				})
+				.then(({ data }) => {
+					updateUserData({
+						type: "LOGIN",
+						payload: { ...userData, ...data },
+					})
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		}
+	}, [access_token])
 
-                <div
-                    className={
-                        "absolute bg-white w-full left-0 top-full mt-0.5 border-b border-grey py-4 px-[5vw] md:border-0 md:block md:relative md:inset-0 md:p-0 md:w-auto md:show " +
-                        (searchboxVisibility ? "sow" : "hide")
-                    }
-                >
-                    <input
-                        type="text"
-                        name=""
-                        placeholder="Search"
-                        className="w-full md:w-auto bg-grey p-4 pl-6 pr-[12%] md:pr-6 rounded-full placeholder:text-dark-grey md:pl-12"
-                        onKeyDown={handleSearch}
-                    />
+	return (
+		<Fragment>
+			<nav className="navbar z-50">
+				<Link to="/" className="flex-none w-10">
+					<img src={logo} alt="logo" className="w-full" />
+				</Link>
 
-                    <i className="fi fi-rr-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey"></i>
-                </div>
+				<div
+					className={
+						"absolute bg-white w-full left-0 top-full mt-0.5 border-b border-grey py-4 px-[5vw] md:border-0 md:block md:relative md:inset-0 md:p-0 md:w-auto md:show " +
+						(searchboxVisibility ? "sow" : "hide")
+					}
+				>
+					<input
+						type="text"
+						name=""
+						placeholder="Search"
+						className="w-full md:w-auto bg-grey p-4 pl-6 pr-[12%] md:pr-6 rounded-full placeholder:text-dark-grey md:pl-12"
+						onKeyDown={handleSearch}
+					/>
 
-                <div className="flex items-center gap-3 md:gap-6 ml-auto">
-                    <button
-                        className="md:hidden bg-grey w-12 h-12 rounded-full flex items-center justify-center"
-                        onClick={() =>
-                            setSearchBoxVisibility((current) => !current)
-                        }
-                    >
-                        <i className="fi fi-rr-search text-xl"></i>
-                    </button>
-                    <Link to="/editor" className="hidden md:flex gap-2 link">
-                        <i className="fi fi-rr-file-edit"></i>
-                        <p>Write</p>
-                    </Link>
+					<i className="fi fi-rr-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey"></i>
+				</div>
 
-                    {access_token ? (
-                        <>
-                            <Link to="/dashboard/notification">
-                                <button className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/20">
-                                    <i className="fi fi-rr-bell text-2xl block mt-1"></i>
-                                </button>
-                            </Link>
+				<div className="flex items-center gap-3 md:gap-6 ml-auto">
+					<button
+						className="md:hidden bg-grey w-12 h-12 rounded-full flex items-center justify-center"
+						onClick={() =>
+							setSearchBoxVisibility((current) => !current)
+						}
+					>
+						<i className="fi fi-rr-search text-xl"></i>
+					</button>
+					<Link to="/editor" className="hidden md:flex gap-2 link">
+						<i className="fi fi-rr-file-edit"></i>
+						<p>Write</p>
+					</Link>
 
-                            <div
-                                className="relative"
-                                onClick={handleUserNavPanel}
-                                onBlur={handleBlur}
-                            >
-                                <button className="w-12 h-12 mt-1">
-                                    <img
-                                        className="w-full h-full object-cover rounded-full"
-                                        src={profile_img}
-                                        alt="user"
-                                    />
-                                </button>
+					{access_token ? (
+						<>
+							<Link to="/dashboard/notification">
+								<button className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/20">
+									<i className="fi fi-rr-bell text-2xl block mt-1"></i>
+									{new_notification_available && (
+										<span className="bg-red w-3 h-3 rounded-full absolute z-10 top-2 right-2"></span>
+									)}
+								</button>
+							</Link>
 
-                                {userNavPanel && <UserNavigationPanel />}
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/signin" className="btn-dark py-2">
-                                Sign In
-                            </Link>
-                            <Link
-                                to="/signup"
-                                className="btn-light py-2 hidden md:block"
-                            >
-                                Sign Up
-                            </Link>
-                        </>
-                    )}
-                </div>
-            </nav>
+							<div
+								className="relative"
+								onClick={handleUserNavPanel}
+								onBlur={handleBlur}
+							>
+								<button className="w-12 h-12 mt-1">
+									<img
+										className="w-full h-full object-cover rounded-full"
+										src={profile_img}
+										alt="user"
+									/>
+								</button>
 
-            <Outlet />
-        </Fragment>
-    )
+								{userNavPanel && <UserNavigationPanel />}
+							</div>
+						</>
+					) : (
+						<>
+							<Link to="/signin" className="btn-dark py-2">
+								Sign In
+							</Link>
+							<Link
+								to="/signup"
+								className="btn-light py-2 hidden md:block"
+							>
+								Sign Up
+							</Link>
+						</>
+					)}
+				</div>
+			</nav>
+
+			<Outlet />
+		</Fragment>
+	)
 }
 
 export default Navbar

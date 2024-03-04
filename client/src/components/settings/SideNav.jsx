@@ -6,7 +6,7 @@ import { useStateContext } from "../../contexts/GlobalContext"
 
 const SideNav = () => {
 	const {
-		userData: { access_token },
+		userData: { access_token, new_notification_available },
 	} = useStateContext()
 
 	const currentPage = location.pathname.split("/")[2]
@@ -92,7 +92,12 @@ const SideNav = () => {
 							to="/notifications"
 							onClick={(e) => setPage(e.target.innerText)}
 						>
-							<i className="fi fi-rr-bell"></i>
+							<div className="relative">
+								<i className="fi fi-rr-bell"></i>
+								{new_notification_available && (
+									<span className="bg-red w-2 h-2 rounded-full absolute z-10 top-0 right-0"></span>
+								)}
+							</div>
 							Notification
 						</NavLink>
 						<NavLink

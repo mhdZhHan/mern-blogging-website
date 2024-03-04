@@ -16,8 +16,8 @@
 # Content-Type: application/json
 
 # {
-#     "email": "liviya@example.com",
-#     "password": "HelloWorld123"
+#     "email": "hello@example.com",
+#     "password": "Hello123"
 # }
 
 
@@ -96,10 +96,16 @@
 
 # ======== Update profile_img ========
 
-POST http://localhost:9001/api/v1/users/update-profile-img
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTEwMjRiODExNDhmZWFkZGYxMzFiMCIsImlhdCI6MTcwOTM1NDQ0Nn0.siWd4rD1FoRyp-QNLkPmth0njtORd5MyPaNJI_uigxA
+# POST http://localhost:9001/api/v1/users/update-profile-img
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NTEwMjRiODExNDhmZWFkZGYxMzFiMCIsImlhdCI6MTcwOTM1NDQ0Nn0.siWd4rD1FoRyp-QNLkPmth0njtORd5MyPaNJI_uigxA
 
-{
-    "url": "hhh.jpg"
-}
+# {
+#     "url": "hhh.jpg"
+# }
+
+
+# ======== Get notifications ========
+
+GET http://localhost:9001/api/v1/notification/new
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NDYzMDQ0ZGQxODI1ODc4YTI4ZjEyZSIsImlhdCI6MTcwOTUzMTIyNX0.o7-AuZi28nc8UzvQWElXZ-rUMGBzz0a6P-q6lsLNfRU

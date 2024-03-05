@@ -77,10 +77,14 @@ export const addComment = async (req, res) => {
 			await Comment.findOneAndUpdate(
 				{ _id: replying_to },
 				{ $push: { children: commentFile._id } }
-			).then((replyingToCommentDoc) => {
-				notificationObj.notification_for =
-					replyingToCommentDoc.commented_by
-			})
+			)
+				.then((replyingToCommentDoc) => {
+					notificationObj.notification_for =
+						replyingToCommentDoc.commented_by
+				})
+				.catch((error) => {
+					console.log(error)
+				})
 		}
 
 		new Notification(notificationObj)

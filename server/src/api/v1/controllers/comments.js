@@ -57,13 +57,13 @@ export const addComment = async (req, res) => {
 		/**
 		 * if it is a replying the `type` of the notification should be `reply'
 		 */
-		const notificationObj = new Notification({
+		const notificationObj = {
 			type: replying_to ? "reply" : "comment",
 			blog: blog_id,
 			notification_for: blog_author,
 			user: user_id,
 			comment: commentFile._id,
-		})
+		}
 
 		/**
 		 * if it is a replying updating the `Notification`
@@ -83,7 +83,7 @@ export const addComment = async (req, res) => {
 			})
 		}
 
-		notificationObj
+		new Notification(notificationObj)
 			.save()
 			.then((notification) => console.log("Notification created"))
 
@@ -121,7 +121,7 @@ export const getComments = async (req, res) => {
 		})
 		.catch((error) => {
 			console.log(error?.message)
-			res.status(404).json({
+			res.status(500).json({
 				status: 6001,
 				message: error?.message,
 			})
@@ -163,63 +163,76 @@ export const getReplies = async (req, res) => {
 }
 
 function deleteComments(_id) {
-	Comment.findOneAndDelete({ _id }).then((comment) => {
-		if (comment && comment.parent) {
-			Comment.findOneAndUpdate(
-				{ id: comment.parent },
-				{ $pull: { children: _id } }
-			)
-				.then((data) => console.log("Comment delete from parent"))
-				.catch((error) => console.log(error))
-		}
-
-		Notification.findOneAndDelete({ comment: _id }).then((notification) =>
-			console.log("Comment deleted")
-		)
-
-		Notification.findOneAndDelete({ reply: _id }).then((notification) =>
-			console.log("Reply deleted")
-		)
-
-		Blog.findOneAndUpdate(
-			{ _id: comment?.blog_id },
-			{
-				$pull: { comments: _id },
-				$inc: { "activity.total_comments": -1 },
-				"activity.total_parent_comments": comment?.parent ? 0 : -1,
+	Comment.findOneAndDelete({ _id })
+		.then((comment) => {
+			if (comment.parent) {
+				Comment.findOneAndUpdate(
+					{ id: comment.parent },
+					{ $pull: { children: _id } }
+				)
+					.then((data) => console.log("Comment delete from parent"))
+					.catch((error) =>
+						console.log("Deletion error from the parent", error)
+					)
 			}
-		)
-			.then((blog) => {
-				if (comment?.children.length) {
-					comment?.children.map((replies) => {
-						deleteComments(replies)
+
+			Notification.findOneAndDelete({ comment: _id }).then(
+				(notification) => console.log("Comment notification deleted")
+			)
+
+			Notification.findOneAndDelete({ reply: _id }).then((notification) =>
+				console.log("Reply notification deleted")
+			)
+
+			Blog.findOneAndUpdate(
+				{ _id: comment.blog_id },
+				{
+					$pull: { comments: _id },
+					$inc: {
+						"activity.total_comments": -1,
+						"activity.total_parent_comments": comment.parent
+							? 0
+							: -1,
+					},
+				}
+			).then((blog) => {
+				if (comment.children.length) {
+					comment.children.forEach((replies) => {
+						deleteComments(replies) // recursion
 					})
 				}
 			})
-			.catch((error) => {
-				console.log(error?.message)
-			})
-	})
+		})
+		.catch((error) => {
+			console.log(error?.message)
+		})
 }
 
-export const deleteComment = async (req, res) => {
+export const deleteComment = (req, res) => {
 	const user_id = req.user
 
 	const { _id } = req.body
 
-	Comment.findOne({ _id }).then((comment) => {
-		if (user_id == comment.commented_by || user_id == comment.blog_author) {
-			deleteComments(_id)
+	Comment.findOne({ _id })
+		.then((comment) => {
+			if (
+				user_id == comment.commented_by ||
+				user_id == comment.blog_author
+			) {
+				deleteComments(_id)
 
-			return res.status(200).json({
-				status: 6000,
-				message: "Deleted",
-			})
-		} else {
-			return res.status(403).json({
-				status: 6001,
-				message: "You can't delete the comment",
-			})
-		}
-	})
+				return res.status(200).json({
+					status: 6000,
+					message: "Deleted",
+				})
+			} else {
+				return res.status(403).json({
+					status: 6001,
+					message: "You can't delete the comment",
+				})
+			}
+		})
+		.catch((error) => {
+			console.log("Comment finding error", error)
+		})
 }

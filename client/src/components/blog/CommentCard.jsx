@@ -167,7 +167,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 					skip,
 				})
 				.then(({ data: { replies } }) => {
-					console.log(replies)
+					console.log("replies",replies)
 
 					commentsArray[currentIndex].isReplyLoaded = true
 
@@ -192,7 +192,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 		}
 	}
 
-	//ANCHOR Components
+	//ANCHOR Other Components
 
 	const LoadMoreRepliesButton = () => {
 		let parentIndex = getParentIndex()
@@ -257,6 +257,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 							{children.length} Reply
 						</button>
 					)}
+
 					<button className="underline" onClick={handleReplyClick}>
 						Reply
 					</button>

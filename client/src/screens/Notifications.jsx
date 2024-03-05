@@ -7,6 +7,13 @@ import { filterPaginationData } from "../functions"
 // contexts
 import { useStateContext } from "../contexts/GlobalContext"
 
+// components
+import Loader from "../components/common/Loader"
+import AnimationWrapper from "../components/common/AnimationWrapper"
+import NodataMessage from "../components/common/NodataMessage"
+import NotificationCard from "../components/dashboard/NotificationCard"
+import LoadMoreBtn from "../components/common/buttons/LoadMoreBtn"
+
 const Notifications = () => {
 	const [filter, setFilter] = useState("all")
 	const [notifications, setNotifications] = useState(null)
@@ -39,11 +46,11 @@ const Notifications = () => {
 				})
 
 				setNotifications(formattedData)
-				console.log(formattedData)
+				// console.log(formattedData)
 			})
 			.catch((error) => {
-                console.log(error);
-            })
+				console.log(error)
+			})
 	}
 
 	const handleFilter = (event) => {
@@ -51,14 +58,14 @@ const Notifications = () => {
 
 		setFilter(brn.innerHTML)
 
-        setNotifications(null)
+		setNotifications(null)
 	}
 
-    useEffect(() => {
-        if (access_token) {
-            fetchNotifications({ page: 1 })
-        }
-    }, [access_token, filter])
+	useEffect(() => {
+		if (access_token) {
+			fetchNotifications({ page: 1 })
+		}
+	}, [access_token, filter])
 
 	return (
 		<div>
@@ -78,6 +85,40 @@ const Notifications = () => {
 					</button>
 				))}
 			</div>
+
+			{notifications == null ? (
+				<Loader />
+			) : (
+				<>
+					{notifications.results.length ? (
+						notifications.results.map((notification, index) => (
+							<AnimationWrapper
+								key={index}
+								transition={{ delay: index * 0.08 }}
+							>
+								<NotificationCard
+									data={notification}
+									index={index}
+									notificationState={{
+										notifications,
+										setNotifications,
+									}}
+								/>
+							</AnimationWrapper>
+						))
+					) : (
+						<NodataMessage message="Nothing available" />
+					)}
+
+					<LoadMoreBtn
+						state={notifications}
+						fetchDataFunc={fetchNotifications}
+						additionalParam={{
+							deletedDocCount: notifications.deletedDocCount,
+						}}
+					/>
+				</>
+			)}
 		</div>
 	)
 }

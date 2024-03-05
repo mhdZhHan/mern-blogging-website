@@ -53,7 +53,7 @@ export const notifications = (req, res) => {
 	Notification.find(findQuery)
 		.skip(skipDocs)
 		.limit(maxLimit)
-		.populate("blog", "title, blog_id")
+		.populate("blog", "title blog_id")
 		.populate(
 			"user",
 			"personal_info.fullName personal_info.username personal_info.profile_img"
@@ -64,7 +64,6 @@ export const notifications = (req, res) => {
 		.sort({ createdAt: -1 })
 		.select("createdAt type seen reply")
 		.then((notifications) => {
-			console.log("Hello",notifications);
 			return res.status(200).json({
 				status: 6000,
 				notifications,

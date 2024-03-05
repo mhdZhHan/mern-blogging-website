@@ -6,7 +6,8 @@ import Notification from "../../../models/Notification.js"
 export const addComment = (req, res) => {
 	const user_id = req.user
 
-	const { blog_id, comment, blog_author, replying_to } = req.body
+	const { blog_id, comment, blog_author, replying_to, notification_id } =
+		req.body
 
 	if (!comment.length) {
 		return res.status(403).json({
@@ -74,7 +75,7 @@ export const addComment = (req, res) => {
 		if (replying_to) {
 			notificationObj.replied_on_comment = replying_to
 
-			console.log("replied_on_comment",replying_to);
+			console.log("replied_on_comment", replying_to)
 
 			await Comment.findOneAndUpdate(
 				{ _id: replying_to },
@@ -84,16 +85,28 @@ export const addComment = (req, res) => {
 					notificationObj.notification_for =
 						replyingToCommentDoc.commented_by
 
-					console.log("notification_for",replyingToCommentDoc.commented_by);
+					console.log(
+						"notification_for",
+						replyingToCommentDoc.commented_by
+					)
 				})
 				.catch((error) => {
 					console.log(error)
 				})
+
+			if (notification_id) {
+				Notification.findOneAndUpdate(
+					{ _id: notification_id },
+					{ reply: commentFile._id }
+				).then(() => console.log("Notification updated"))
+			}
 		}
 
 		new Notification(notificationObj)
 			.save()
-			.then((notification) => console.log("Notification created", notification))
+			.then((notification) =>
+				console.log("Notification created", notification)
+			)
 
 		return res.status(200).json({
 			status: 6000,

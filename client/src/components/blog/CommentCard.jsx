@@ -167,7 +167,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 					skip,
 				})
 				.then(({ data: { replies } }) => {
-					console.log("replies",replies)
+					console.log("replies", replies)
 
 					commentsArray[currentIndex].isReplyLoaded = true
 
@@ -197,27 +197,35 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 	const LoadMoreRepliesButton = () => {
 		let parentIndex = getParentIndex()
 
-		// console.log(commentsArray[index + 1].childrenLevel);
-		console.log(commentsArray[index].childrenLevel);
+		let button = (
+			<button
+				className="text-dark-grey p-2 px-3 hover:bg-grey/30 rounded-md flex items-center gap-2"
+				onClick={() =>
+					loadReplies({
+						skip: index - parentIndex,
+						currentIndex: parentIndex,
+					})
+				}
+			>
+				Load More Replies
+			</button>
+		)
 
 		if (commentsArray[index + 1]) {
 			if (
 				commentsArray[index + 1].childrenLevel <
 				commentsArray[index].childrenLevel
 			) {
-				return (
-					<button
-						className="text-dark-grey p-2 px-3 hover:bg-grey/30 rounded-md flex items-center gap-2"
-						onClick={() =>
-							loadReplies({
-								skip: index - parentIndex,
-								currentIndex: parentIndex,
-							})
-						}
-					>
-						Load More Replies
-					</button>
-				)
+				if (
+					index - parentIndex <
+					commentsArray[parentIndex].children.length
+				) {
+					return button
+				}
+			}
+		} else {
+			if (parentIndex) {
+				return button
 			}
 		}
 	}

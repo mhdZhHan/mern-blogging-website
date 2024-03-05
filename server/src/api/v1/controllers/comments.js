@@ -3,7 +3,7 @@ import Comment from "../../../models/Comment.js"
 import Blog from "../../../models/Blog.js"
 import Notification from "../../../models/Notification.js"
 
-export const addComment = async (req, res) => {
+export const addComment = (req, res) => {
 	const user_id = req.user
 
 	const { blog_id, comment, blog_author, replying_to } = req.body
@@ -57,7 +57,7 @@ export const addComment = async (req, res) => {
 		/**
 		 * if it is a replying the `type` of the notification should be `reply'
 		 */
-		const notificationObj = {
+		let notificationObj = {
 			type: replying_to ? "reply" : "comment",
 			blog: blog_id,
 			notification_for: blog_author,
@@ -74,6 +74,8 @@ export const addComment = async (req, res) => {
 		if (replying_to) {
 			notificationObj.replied_on_comment = replying_to
 
+			console.log("replied_on_comment",replying_to);
+
 			await Comment.findOneAndUpdate(
 				{ _id: replying_to },
 				{ $push: { children: commentFile._id } }
@@ -81,6 +83,8 @@ export const addComment = async (req, res) => {
 				.then((replyingToCommentDoc) => {
 					notificationObj.notification_for =
 						replyingToCommentDoc.commented_by
+
+					console.log("notification_for",replyingToCommentDoc.commented_by);
 				})
 				.catch((error) => {
 					console.log(error)
@@ -89,7 +93,7 @@ export const addComment = async (req, res) => {
 
 		new Notification(notificationObj)
 			.save()
-			.then((notification) => console.log("Notification created"))
+			.then((notification) => console.log("Notification created", notification))
 
 		return res.status(200).json({
 			status: 6000,

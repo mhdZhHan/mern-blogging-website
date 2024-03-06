@@ -13,6 +13,7 @@ import {
     getBlog,
     likeBlog,
     isUserLiked,
+    deleteBlog,
 } from "../controllers/blogs.js"
 
 const router = express.Router()
@@ -32,5 +33,7 @@ router.post("/get-blog", getBlog)
 
 router.post("/like-blog", verifyJWT, likeBlog)
 router.post("/is-user-liked", verifyJWT, isUserLiked)
+
+router.post("/delete", verifyJWT, deleteBlog)
 
 export default router

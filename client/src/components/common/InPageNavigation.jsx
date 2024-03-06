@@ -9,7 +9,8 @@ const InPageNavigation = ({
     defaultActiveIndex = 0,
     children,
 }) => {
-    const [inPageNavIndex, setInPageNavIndex] = useState(defaultActiveIndex)
+    // const [inPageNavIndex, setInPageNavIndex] = useState(defaultActiveIndex)
+    const [inPageNavIndex, setInPageNavIndex] = useState(null)
 
     activeTabLineRef = useRef()
     activeTabRef = useRef()

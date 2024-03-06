@@ -16,7 +16,7 @@
 # Content-Type: application/json
 
 # {
-#     "email": "hello@example.com",
+#     "email": "mohammedsh@example.com",
 #     "password": "Hello123"
 # }
 
@@ -107,5 +107,16 @@
 
 # ======== Get notifications ========
 
-GET http://localhost:9001/api/v1/notifications/new
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NDYzMDQ0ZGQxODI1ODc4YTI4ZjEyZSIsImlhdCI6MTcwOTUzMTIyNX0.o7-AuZi28nc8UzvQWElXZ-rUMGBzz0a6P-q6lsLNfRU
+# GET http://localhost:9001/api/v1/notifications/new
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NDYzMDQ0ZGQxODI1ODc4YTI4ZjEyZSIsImlhdCI6MTcwOTUzMTIyNX0.o7-AuZi28nc8UzvQWElXZ-rUMGBzz0a6P-q6lsLNfRU
+
+# ======== Get user blogs ========
+
+POST http://localhost:9001/api/v1/users/blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTViZDg2MjJkNDQ3ZDkyMjM4MzdhMyIsImlhdCI6MTcwOTY5NTMzMH0.bPKLzGPZOCAh5QcDYU_ygGJ9kEv9Lh_iqxdQ50ez_UY
+Content-Type: application/json
+
+{
+    "page": 1,
+    "draft": false
+}

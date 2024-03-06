@@ -1,4 +1,5 @@
 import User from "../../../models/User.js"
+import Blog from "../../../models/Blog.js"
 
 export const searchUsers = async (req, res) => {
 	const { query } = req.body
@@ -137,6 +138,62 @@ export const updateProfile = async (req, res) => {
 					message: "Username is already taken",
 				})
 			}
+			return res.status(500).json({
+				status: 6001,
+				message: error?.message,
+			})
+		})
+}
+
+export const getUserBlogs = (req, res) => {
+	const user_id = req.user
+
+	const { page, draft, query, deletedDocCount } = req.body
+
+	const maxLimit = 5
+
+	let skipDoc = (page - 1) * maxLimit
+
+	if (deletedDocCount) {
+		skipDoc -= deletedDocCount
+	}
+
+	Blog.find({ author: user_id, draft, title: new RegExp(query, "i") })
+		.skip(skipDoc)
+		.limit(maxLimit)
+		.sort({ publishedAt: -1 })
+		.select("title banner publishedAt blog_id activity des draft -_id")
+		.then((blogs) => {
+			return res.status(200).json({
+				status: 6000,
+				blogs,
+			})
+		})
+		.catch((error) => {
+			return res.status(500).json({
+				status: 6001,
+				message: error?.message,
+			})
+		})
+}
+
+export const getUserBlogsCount = (req, res) => {
+	const user_id = req.user
+
+	const { draft, query } = req.body
+
+	Blog.countDocuments({
+		author: user_id,
+		draft,
+		title: new RegExp(query, "i"),
+	})
+		.then((count) => {
+			return res.status(200).json({
+				status: 6000,
+				totalDocs: count,
+			})
+		})
+		.catch((error) => {
 			return res.status(500).json({
 				status: 6001,
 				message: error?.message,

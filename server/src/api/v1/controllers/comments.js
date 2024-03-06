@@ -201,9 +201,10 @@ function deleteComments(_id) {
 				(notification) => console.log("Comment notification deleted")
 			)
 
-			Notification.findOneAndDelete({ reply: _id }).then((notification) =>
-				console.log("Reply notification deleted")
-			)
+			Notification.findOneAndUpdate(
+				{ reply: _id },
+				{ $unset: { reply: 1 } }
+			).then((notification) => console.log("Reply notification deleted"))
 
 			Blog.findOneAndUpdate(
 				{ _id: comment.blog_id },

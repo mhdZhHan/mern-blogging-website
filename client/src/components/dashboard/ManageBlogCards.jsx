@@ -176,9 +176,15 @@ const deleteBlog = (blog, access_token, target) => {
 					deletedDocCount = 0
 				}
 
-				if (results.length && totalDocs - 1 > 0) {
+				if (!results.length && totalDocs - 1 > 0) {
 					return null
 				}
+
+				console.log({
+					...preVal,
+					totalDocs: totalDocs - 1,
+					deletedDocCount: deletedDocCount + 1,
+				})
 
 				return {
 					...preVal,

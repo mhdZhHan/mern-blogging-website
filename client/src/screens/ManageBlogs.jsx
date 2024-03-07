@@ -18,6 +18,8 @@ import {
 	ManageDraftBlogPost,
 } from "../components/dashboard/ManageBlogCards"
 
+import LoadMoreBtn from "../components/common/buttons/LoadMoreBtn"
+
 const ManageBlogs = () => {
 	const [blogs, setBlogs] = useState(null)
 	const [drafts, setDrafts] = useState(null)
@@ -60,7 +62,7 @@ const ManageBlogs = () => {
 				}
 			})
 			.catch((error) => {
-				console.log(erroe)
+				console.log(error)
 			})
 	}
 
@@ -136,6 +138,15 @@ const ManageBlogs = () => {
 									/>
 								</AnimationWrapper>
 							))}
+
+							<LoadMoreBtn
+								state={blogs}
+								fetchDataFunc={setBlogs}
+								additionalParam={{
+									draft: false,
+									deletedDocCount: blogs.deletedDocCount,
+								}}
+							/>
 						</>
 					) : (
 						<NodataMessage message="No published blogs found" />

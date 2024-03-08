@@ -4,8 +4,11 @@ import axios from "axios"
 
 import { useStateContext } from "../contexts/GlobalContext"
 
+// functions
+import { setSession } from "../functions/session"
+
 // assets
-import { logo } from "../assets"
+import { logoDark, logoLight } from "../assets"
 
 import UserNavigationPanel from "./UserNavigationPanel"
 
@@ -19,7 +22,20 @@ const Navbar = () => {
 		userData,
 		userData: { access_token, profile_img, new_notification_available },
 		updateUserData,
+		// theme
+		theme,
+		setTheme,
 	} = useStateContext()
+
+	const changeTheme = () => {
+		let newTheme = theme == "light" ? "dark" : "light"
+
+		setTheme(newTheme)
+
+		document.body.setAttribute("data-theme", newTheme)
+
+		setSession("theme", newTheme)
+	}
 
 	const handleUserNavPanel = () => {
 		setUserNavPanel((current) => !current)
@@ -64,7 +80,11 @@ const Navbar = () => {
 		<Fragment>
 			<nav className="navbar z-50">
 				<Link to="/" className="flex-none w-10">
-					<img src={logo} alt="logo" className="w-full" />
+					<img
+						src={theme == "light" ? logoDark : logoLight}
+						alt="logo"
+						className="w-full"
+					/>
 				</Link>
 
 				<div
@@ -97,6 +117,20 @@ const Navbar = () => {
 						<i className="fi fi-rr-file-edit"></i>
 						<p>Write</p>
 					</Link>
+
+					{/* change theme */}
+					<button
+						className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/20"
+						onClick={changeTheme}
+					>
+						<i
+							className={
+								"fi fi-rr-" +
+								(theme == "light" ? "moon-stars" : "sun") +
+								" text-2xl block mt-1"
+							}
+						></i>
+					</button>
 
 					{access_token ? (
 						<>

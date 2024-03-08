@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import toast, { Toaster } from "react-hot-toast"
+import { Toaster } from "react-hot-toast"
+import { useSearchParams } from "react-router-dom"
 
 // contexts
 import { useStateContext } from "../contexts/GlobalContext"
@@ -24,6 +25,8 @@ const ManageBlogs = () => {
 	const [blogs, setBlogs] = useState(null)
 	const [drafts, setDrafts] = useState(null)
 	const [query, setQuery] = useState("")
+
+	const activeTab = useSearchParams()[0].get("tab")
 
 	const {
 		userData: { access_token },
@@ -116,7 +119,7 @@ const ManageBlogs = () => {
 
 			<InPageNavigation
 				routes={["Published Blogs", "Draft"]}
-				defaultHidden={[""]}
+				defaultActiveIndex={activeTab != "draft" ? 0 : 1}
 			>
 				{
 					// published blogs

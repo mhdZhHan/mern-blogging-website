@@ -5,12 +5,12 @@ export let activeTabRef
 
 const InPageNavigation = ({
     routes,
-    defaultHidden,
+    defaultHidden = [],
     defaultActiveIndex = 0,
     children,
 }) => {
-    // const [inPageNavIndex, setInPageNavIndex] = useState(defaultActiveIndex)
-    const [inPageNavIndex, setInPageNavIndex] = useState(null)
+    const [inPageNavIndex, setInPageNavIndex] = useState(defaultActiveIndex)
+    // const [inPageNavIndex, setInPageNavIndex] = useState(null)
 
     activeTabLineRef = useRef()
     activeTabRef = useRef()

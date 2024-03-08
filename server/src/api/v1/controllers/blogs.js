@@ -4,6 +4,7 @@ import { nanoid } from "nanoid"
 import Blog from "../../../models/Blog.js"
 import User from "../../../models/User.js"
 import Notification from "../../../models/Notification.js"
+import Comment from "../../../models/Comment.js"
 
 // configs
 import { s3 } from "../../../configs/index.js"

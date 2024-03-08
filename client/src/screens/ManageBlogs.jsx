@@ -141,7 +141,7 @@ const ManageBlogs = () => {
 
 							<LoadMoreBtn
 								state={blogs}
-								fetchDataFunc={setBlogs}
+								fetchDataFunc={getBlogs}
 								additionalParam={{
 									draft: false,
 									deletedDocCount: blogs.deletedDocCount,
@@ -173,6 +173,15 @@ const ManageBlogs = () => {
 									/>
 								</AnimationWrapper>
 							))}
+
+							<LoadMoreBtn
+								state={drafts}
+								fetchDataFunc={getBlogs}
+								additionalParam={{
+									draft: true,
+									deletedDocCount: drafts.deletedDocCount,
+								}}
+							/>
 						</>
 					) : (
 						<NodataMessage message="No draft blogs" />

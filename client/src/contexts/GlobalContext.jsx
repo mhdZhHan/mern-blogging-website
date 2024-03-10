@@ -7,15 +7,17 @@ const StateContext = createContext({
 	updateUserData: () => {},
 })
 
-const darkThemePreference = () =>
-	window.matchMedia("(prefers-color-scheme: dark)").matches
+// const darkThemePreference = () =>
+// 	window.matchMedia("(prefers-color-scheme: dark)").matches
 
 export const GlobalContext = ({ children }) => {
 	const [userData, setUserData] = useState({})
 
-	const [theme, setTheme] = useState(() => {
-		darkThemePreference() ? "dark" : "light"
-	})
+	// const [theme, setTheme] = useState(() => {
+	// 	darkThemePreference() ? "dark" : "light"
+	// })
+
+	const [theme, setTheme] = useState("light")
 
 	const updateUserData = (action) => {
 		switch (action?.type) {

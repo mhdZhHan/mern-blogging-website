@@ -1,7 +1,7 @@
-const Img = ({ url, caption }) => {
+const Img = ({ src, caption }) => {
     return (
         <div>
-            <img src={url} />
+            <img src={src} />
             {caption.length ? (
                 <p className="w-full text-center my-3 md:mb-12 text-base text-dark-grey">
                     {caption}

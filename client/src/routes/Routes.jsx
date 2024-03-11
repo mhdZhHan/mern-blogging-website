@@ -38,6 +38,7 @@ const Routes_ = () => {
 						/>
 						<Route path="blogs" element={<ManageBlogs />} />
 					</Route>
+
 					<Route path="settings" element={<SideNav />}>
 						<Route path="edit-profile" element={<EditProfile />} />
 						<Route
@@ -45,10 +46,12 @@ const Routes_ = () => {
 							element={<ChangePassword />}
 						/>
 					</Route>
+
 					<Route
 						path="signin"
 						element={<AuthForm type="sign-in" />}
 					/>
+					
 					<Route
 						path="signup"
 						element={<AuthForm type="sign-up" />}

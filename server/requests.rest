@@ -112,11 +112,17 @@
 
 # ======== Get user blogs ========
 
-POST http://localhost:9001/api/v1/users/blogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTViZDg2MjJkNDQ3ZDkyMjM4MzdhMyIsImlhdCI6MTcwOTY5NTMzMH0.bPKLzGPZOCAh5QcDYU_ygGJ9kEv9Lh_iqxdQ50ez_UY
-Content-Type: application/json
+# POST http://localhost:9001/api/v1/users/blogs
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZTViZDg2MjJkNDQ3ZDkyMjM4MzdhMyIsImlhdCI6MTcwOTY5NTMzMH0.bPKLzGPZOCAh5QcDYU_ygGJ9kEv9Lh_iqxdQ50ez_UY
+# Content-Type: application/json
 
-{
-    "page": 1,
-    "draft": false
-}
+# {
+#     "page": 1,
+#     "draft": false
+# }
+
+# Get all users Admin
+
+GET http://localhost:9001/api/v1/admin/all-users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWU4NzhmNjQwMzc4YTVmYzdlNzRjMCIsImlhdCI6MTcxMDEzMzg5Mn0.v9jLAppJImQFU6-NAp1AxTKTRv5PPpdOZ8mfPOkcvw0
+Content-Type: application/json

@@ -3,11 +3,11 @@ import axios from "axios"
 import { Toaster, toast } from "react-hot-toast"
 
 // contexts
-import { useStateContext } from "../contexts/GlobalContext"
+import { useStateContext } from "../../contexts/GlobalContext"
 
 // components
-import InputBox from "../components/InputBox"
-import AnimationWrapper from "../components/common/AnimationWrapper"
+import InputBox from "../../components/InputBox"
+import AnimationWrapper from "../../components/common/AnimationWrapper"
 
 const AdminAuth = () => {
 	const { adminData, updateAdminData } = useStateContext()
@@ -39,7 +39,7 @@ const AdminAuth = () => {
 			})
 	}
 	return adminData?.admin_token ? (
-		<Navigate to="/admin" />
+		<Navigate to="/admin/blogs" />
 	) : (
 		<AnimationWrapper keyValue="admin-login">
 			<section className="h-cover flex items-center justify-center">

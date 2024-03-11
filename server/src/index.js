@@ -14,6 +14,7 @@ import blogsRouter from "./api/v1/routes/blogs.js"
 import usersRouter from "./api/v1/routes/users.js"
 import commentsRouter from "./api/v1/routes/comments.js"
 import notificationRouter from "./api/v1/routes/notification.js"
+import adminRouter from "./api/v1/routes/admin.js"
 
 const app = express()
 
@@ -35,3 +36,4 @@ app.use("/api/v1/blogs/", blogsRouter)
 app.use("/api/v1/users/", usersRouter)
 app.use("/api/v1/comments/", commentsRouter)
 app.use("/api/v1/notifications/", notificationRouter)
+app.use("/api/v1/admin/", adminRouter)

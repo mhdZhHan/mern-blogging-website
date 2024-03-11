@@ -5,6 +5,9 @@ const StateContext = createContext({
 	userData: {},
 	setUserData: () => {},
 	updateUserData: () => {},
+
+	adminData: {},
+	updateAdminData: () => {},
 })
 
 // const darkThemePreference = () =>
@@ -12,6 +15,7 @@ const StateContext = createContext({
 
 export const GlobalContext = ({ children }) => {
 	const [userData, setUserData] = useState({})
+	const [adminData, setAdminData] = useState({})
 
 	// const [theme, setTheme] = useState(() => {
 	// 	darkThemePreference() ? "dark" : "light"
@@ -34,13 +38,33 @@ export const GlobalContext = ({ children }) => {
 		}
 	}
 
+	const updateAdminData = (action) => {
+		switch (action?.type) {
+			case "LOGOUT":
+				setAdminData({ admin_token: null })
+				logoutUser()
+				break
+			case "LOGIN":
+				setSession("admin", JSON.stringify(action?.payload))
+				setAdminData(action?.payload)
+				break
+			default:
+				return
+		}
+	}
+
 	useEffect(() => {
 		const isUserInSession = getSession("user")
 		const isThemeInSession = getSession("theme")
+		const isAdminInSession = getSession("admin")
 
 		isUserInSession
 			? setUserData(JSON.parse(isUserInSession))
 			: setUserData({ access_token: null })
+
+		isAdminInSession
+			? setAdminData(JSON.parse(isAdminInSession))
+			: setAdminData({ admin_token: null })
 
 		// setting theme
 		if (isThemeInSession) {
@@ -56,7 +80,14 @@ export const GlobalContext = ({ children }) => {
 
 	return (
 		<StateContext.Provider
-			value={{ userData, updateUserData, theme, setTheme }}
+			value={{
+				userData,
+				updateUserData,
+				theme,
+				setTheme,
+				adminData,
+				updateAdminData,
+			}}
 		>
 			{children}
 		</StateContext.Provider>

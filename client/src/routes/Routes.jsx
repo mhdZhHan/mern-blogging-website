@@ -16,6 +16,8 @@ import ChangePassword from "../screens/ChangePassword"
 import EditProfile from "../screens/EditProfile"
 import Notifications from "../screens/Notifications"
 import ManageBlogs from "../screens/ManageBlogs"
+import Admin from "../screens/Admin"
+import AdminAuth from "../screens/AdminAuth"
 
 const Routes_ = () => {
 	return (
@@ -30,10 +32,7 @@ const Routes_ = () => {
 							path="notifications"
 							element={<Notifications />}
 						/>
-						<Route
-							path="blogs"
-							element={<ManageBlogs />}
-						/>
+						<Route path="blogs" element={<ManageBlogs />} />
 					</Route>
 					<Route path="settings" element={<SideNav />}>
 						<Route path="edit-profile" element={<EditProfile />} />
@@ -54,6 +53,11 @@ const Routes_ = () => {
 					<Route path="user/:id" element={<UserProfile />} />
 					<Route path="blog/:blogId" element={<Blog />} />
 					<Route path="*" element={<PageNotFound />} />
+				</Route>
+
+				<Route path="/admin" element={<Navbar />}>
+					<Route index element={<Admin />} />
+					<Route path="login" element={<AdminAuth />} />
 				</Route>
 			</Routes>
 		</Router>

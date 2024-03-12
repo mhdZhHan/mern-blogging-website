@@ -24,6 +24,7 @@ const BlogInteraction = () => {
 		isUserLiked,
 		setIsUserLiked,
 		setIsCommentsWrapper,
+		setIsReportContainer,
 	} = useContext(BlogContext)
 
 	const {
@@ -123,12 +124,14 @@ const BlogInteraction = () => {
 					</button>
 					<p className="text-xl text-dark-grey">{total_comments}</p>
 
-					<Link
-						to={`/report/${blog_id}`}
+					<button
 						className="flex items-center justify-center ml-2 underline"
+						onClick={() =>
+							setIsReportContainer((preVal) => !preVal)
+						}
 					>
 						<p className="text-xl text-dark-grey">Report</p>
-					</Link>
+					</button>
 				</div>
 
 				<div className="flex gap-6 items-center">

@@ -14,6 +14,7 @@ import BlogContent from "../components/blog/BlogContent"
 import CommentsContainer, {
     fetchComments,
 } from "../components/blog/CommentsContainer"
+import ReportContainer from "../components/blog/ReportContainer"
 
 export const blogStructure = {
     title: "",
@@ -34,6 +35,7 @@ const Blog = () => {
 
     // comments
     const [isCommentsWrapper, setIsCommentsWrapper] = useState(true)
+    const [isReportContainer, setIsReportContainer] = useState(true)
     const [totalParentCommentsLoaded, setTotalParentCommentsLoaded] =
         useState(0)
 
@@ -101,6 +103,7 @@ const Blog = () => {
 
         setIsUserLiked(false)
         setIsCommentsWrapper(false)
+        setIsReportContainer(false)
         setTotalParentCommentsLoaded(0)
     }
 
@@ -119,9 +122,13 @@ const Blog = () => {
                         setIsCommentsWrapper,
                         totalParentCommentsLoaded,
                         setTotalParentCommentsLoaded,
+                        isReportContainer,
+                        setIsReportContainer,
                     }}
                 >
                     <CommentsContainer />
+
+                    <ReportContainer />
 
                     <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
                         <img

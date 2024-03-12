@@ -2,8 +2,10 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
 // models
-import User from "../../../models/User.js"
 import Blog from "../../../models/Blog.js"
+import User from "../../../models/User.js"
+import Notification from "../../../models/Notification.js"
+import Comment from "../../../models/Comment.js"
 
 // config
 import { jwtTokenSecret } from "../../../configs/index.js"
@@ -117,40 +119,61 @@ export const deleteUser = async (req, res) => {
 }
 
 export const deleteBlog = async (req, res) => {
-	const { blogId } = req.params
-	const userId = req.user
+	const { blog_id, username } = req.body
+	const user_id = req.user
 
-	try {
-		const blog = await Blog.findById(blogId)
+	console.log(user_id)
 
-		if (!blog) {
-			return res.status(404).json({
-				status: 6001,
-				message: "Blog not found",
-			})
-		}
+	const user = await User.findById(user_id)
 
-		// Check if the logged-in user is an admin
-		const user = await User.findById(userId)
-
-		if (!user || !user.admin) {
-			// If user not found or not an admin, return 403 Forbidden
-			return res.status(403).json({
-				status: 6001,
-				message: "You are not authorized to delete this blog",
-			})
-		}
-
-		await blog.remove()
-
-		res.status(200).json({
-			status: 6000,
-			message: "Blog deleted successfully",
-		})
-	} catch (error) {
-		res.status(500).json({
+	if (!user) {
+		return res.status(404).json({
 			status: 6001,
-			message: error.message,
+			message: "User not found",
 		})
 	}
+
+	if (!user.admin) {
+		return res.status(403).json({
+			status: 6001,
+			message: "You are not an admin",
+		})
+	}
+
+	Blog.findOneAndDelete({ blog_id })
+		.then((blog) => {
+			/**
+			 * deleting all of the notifications and
+			 * comments based on the blog
+			 */
+
+			Notification.deleteMany({ blog: blog._id }).then((data) =>
+				console.log("Notification deleted")
+			)
+
+			Comment.deleteMany({ blog_id: blog._id }).then((data) =>
+				console.log("Comment deleted")
+			)
+
+			User.findOneAndUpdate(
+				{ "personal_info.username": username },
+				{
+					$pull: { blog: blog._id },
+					$inc: { "account_info.total_posts": -1 },
+				}
+			).then(() => {
+				console.log("Blog deleted")
+			})
+
+			return res.status(200).json({
+				status: 6000,
+				message: "Deleted",
+			})
+		})
+		.catch((error) => {
+			return res.status(500).json({
+				status: 6001,
+				message: error?.message,
+			})
+		})
 }

@@ -34,14 +34,70 @@ const BlogStats = ({ stats }) => {
 	)
 }
 
-const BlogCard = ({ blog }) => {
-	const { banner, title, blog_id, publishedAt, activity } = blog
+const BlogCard = ({ blog, setBlogs, index }) => {
+	const {
+		banner,
+		title,
+		blog_id,
+		publishedAt,
+		activity,
+		author: {
+			personal_info: { username },
+		},
+	} = blog
 
 	const [showState, setShowState] = useState(false)
 
 	const {
-		userData: { access_token },
+		adminData: { admin_token },
 	} = useStateContext()
+
+	const handleDeleteBlog = (event) => {
+		event.target.setAttribute("disabled", true)
+
+		axios
+			.post(
+				`${import.meta.env.VITE_API_URL}/admin/delete-blog`,
+				{ blog_id, username },
+				{
+					headers: {
+						Authorization: `Bearer ${admin_token}`,
+					},
+				}
+			)
+			.then(({ data }) => {
+				event.target.removeAttribute("disabled")
+
+				setBlogs((preVal) => {
+					let { deletedDocCount, totalDocs, results } = preVal
+
+					results.splice(index, 1)
+
+					if (!deletedDocCount) {
+						deletedDocCount = 0
+					}
+
+					if (!results.length && totalDocs - 1 > 0) {
+						return null
+					}
+
+					console.log("Hello ", {
+						...preVal,
+						totalDocs: totalDocs - 1,
+						deletedDocCount: deletedDocCount + 1,
+					})
+
+					return {
+						...preVal,
+						totalDocs: totalDocs - 1,
+						deletedDocCount: deletedDocCount + 1,
+					}
+				})
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
 
 	return (
 		<>
@@ -74,9 +130,7 @@ const BlogCard = ({ blog }) => {
 						</button>
 
 						<button
-							// onClick={(event) =>
-							// 	deleteBlog(blog, access_token, event.target)
-							// }
+							onClick={handleDeleteBlog}
 							className="pr-4 py-2 underline text-red"
 						>
 							Delete

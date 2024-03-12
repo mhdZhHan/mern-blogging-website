@@ -93,7 +93,11 @@ const Blogs = () => {
 							key={index}
 							transition={{ delay: index * 0.04 }}
 						>
-							<BlogCard blog={blog} />
+							<BlogCard
+								blog={blog}
+								setBlogs={setBlogs}
+								index={index}
+							/>
 						</AnimationWrapper>
 					))}
 

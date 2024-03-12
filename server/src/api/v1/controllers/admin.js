@@ -6,6 +6,7 @@ import Blog from "../../../models/Blog.js"
 import User from "../../../models/User.js"
 import Notification from "../../../models/Notification.js"
 import Comment from "../../../models/Comment.js"
+import Complaint from "../../../models/Complaint.js"
 
 // config
 import { jwtTokenSecret } from "../../../configs/index.js"
@@ -176,4 +177,39 @@ export const deleteBlog = async (req, res) => {
 				message: error?.message,
 			})
 		})
+}
+
+export const addComplaint = async (req, res) => {
+	const { report_title, report_message, target_id, targetType } = req.body
+	const user_id = req.user 
+
+	try {
+		const newComplaint = new Complaint({
+			report_title,
+			report_message,
+			reported_by: user_id,
+		})
+
+		if (targetType === "blog") {
+			newComplaint.blog = target_id
+		} else if (targetType === "user") {
+			newComplaint.user = target_id
+		} else {
+			return res.status(400).json({
+				success: false,
+				message: "Invalid complaint target type",
+			})
+		}
+		const savedComplaint = await newComplaint.save()
+
+		res.status(201).json({
+			success: 6000,
+			complaint: savedComplaint,
+		})
+	} catch (error) {
+		res.status(500).json({
+			success: 6001,
+			message: error.message,
+		})
+	}
 }

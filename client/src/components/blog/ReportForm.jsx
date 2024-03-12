@@ -7,34 +7,71 @@ import { useStateContext } from "../../contexts/GlobalContext"
 import { BlogContext } from "../../screens/Blog"
 
 const ReportForm = () => {
+	const [reportTitle, setReportTitle] = useState("")
+	const [reportMessage, setReportMessage] = useState("")
+
 	const {
-		userData: { access_token, username, fullName, profile_img },
+		userData: { access_token },
 	} = useStateContext()
 
 	const {
-		blog,
-		blog: {
-			_id,
-			author: { _id: blog_author },
-		},
-		setBlog,
+		blog: { _id },
 	} = useContext(BlogContext)
 
-	const handleReport = () => {}
+	const handleReport = () => {
+		if (!access_token) {
+			return toast.error("Login first to leave a report")
+		}
+
+		if (!reportTitle.length) {
+			return toast.error("Report should have a report title")
+		}
+
+		if (!reportMessage.length) {
+			return toast.error("Report should have a report description")
+		}
+
+		axios
+			.post(
+				`${import.meta.env.VITE_API_URL}/admin/add-report`,
+				{
+					report_title: reportTitle,
+					report_message: reportMessage,
+					target_id: _id,
+					targetType: "blog",
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${access_token}`,
+					},
+				}
+			)
+			.then(({ data }) => {
+				console.log(data, "Done")
+				toast.success("Reported ✅")
+				setReportTitle("")
+				setReportMessage("")
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
 
 	return (
 		<>
 			<Toaster />
 
 			<input
+				value={reportTitle}
+				onChange={(event) => setReportTitle(event.target.value)}
 				type="text"
 				placeholder="Enter issue title"
 				className="input-box pl-5 mb-4 placeholder:text-dark-grey"
 			/>
 
 			<textarea
-				// value={comment}
-				// onChange={(event) => setComment(event.target.value)}
+				value={reportMessage}
+				onChange={(event) => setReportMessage(event.target.value)}
 				placeholder="Enter issue description"
 				className="input-box pl-5 placeholder:text-dark-grey resize-none h-[150px] overflow-auto"
 			></textarea>

@@ -80,7 +80,7 @@ const AdminNav = () => {
 						to="/admin/users"
 						onClick={(e) => setPage(e.target.innerText)}
 					>
-						<i className="fi fi-rr-file-edit"></i>
+						<i className="fi fi-rr-user"></i>
 						Users
 					</NavLink>
                     <NavLink
@@ -88,7 +88,7 @@ const AdminNav = () => {
 						to="/admin/reports"
 						onClick={(e) => setPage(e.target.innerText)}
 					>
-						<i className="fi fi-rr-file-edit"></i>
+						<i className="fi fi-rr-file-medical-alt"></i>
 						Reports
 					</NavLink>
 				</div>

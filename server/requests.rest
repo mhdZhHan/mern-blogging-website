@@ -121,8 +121,14 @@
 #     "draft": false
 # }
 
-# Get all users Admin
+# Get all users (Admin)
 
-GET http://localhost:9001/api/v1/admin/all-users
+# GET http://localhost:9001/api/v1/admin/all-users
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWU4NzhmNjQwMzc4YTVmYzdlNzRjMCIsImlhdCI6MTcxMDEzMzg5Mn0.v9jLAppJImQFU6-NAp1AxTKTRv5PPpdOZ8mfPOkcvw0
+# Content-Type: application/json
+
+# Get all complaints 
+
+GET http://localhost:9001/api/v1/admin/get-reports
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWU4NzhmNjQwMzc4YTVmYzdlNzRjMCIsImlhdCI6MTcxMDEzMzg5Mn0.v9jLAppJImQFU6-NAp1AxTKTRv5PPpdOZ8mfPOkcvw0
 Content-Type: application/json

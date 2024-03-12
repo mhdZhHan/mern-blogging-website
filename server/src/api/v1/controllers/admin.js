@@ -123,8 +123,6 @@ export const deleteBlog = async (req, res) => {
 	const { blog_id, username } = req.body
 	const user_id = req.user
 
-	console.log(user_id)
-
 	const user = await User.findById(user_id)
 
 	if (!user) {
@@ -181,7 +179,7 @@ export const deleteBlog = async (req, res) => {
 
 export const addComplaint = async (req, res) => {
 	const { report_title, report_message, target_id, targetType } = req.body
-	const user_id = req.user 
+	const user_id = req.user
 
 	try {
 		const newComplaint = new Complaint({
@@ -212,4 +210,41 @@ export const addComplaint = async (req, res) => {
 			message: error.message,
 		})
 	}
+}
+
+export const getComplaints = async (req, res) => {
+	const user_id = req.user
+
+	const user = await User.findById(user_id)
+
+	if (!user) {
+		return res.status(404).json({
+			status: 6001,
+			message: "User not found",
+		})
+	}
+
+	if (!user.admin) {
+		return res.status(403).json({
+			status: 6001,
+			message: "You are not an admin",
+		})
+	}
+
+	Complaint.find()
+		.populate("reported_by")
+		.populate("blog")
+		.populate("user")
+		.then((complaints) => {
+			return res.status(200).json({
+				status: 6000,
+				complaints,
+			})
+		})
+		.catch((error) => {
+			return res.status(500).json({
+				status: 6001,
+				message: error?.message,
+			})
+		})
 }

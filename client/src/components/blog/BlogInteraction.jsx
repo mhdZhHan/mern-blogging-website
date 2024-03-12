@@ -123,7 +123,9 @@ const BlogInteraction = () => {
 						<i className="fi fi-rr-comment-dots"></i>
 					</button>
 					<p className="text-xl text-dark-grey">{total_comments}</p>
+				</div>
 
+				<div className="flex gap-6 items-center">
 					<button
 						className="flex items-center justify-center ml-2 underline"
 						onClick={() =>
@@ -132,9 +134,7 @@ const BlogInteraction = () => {
 					>
 						<p className="text-xl text-dark-grey">Report</p>
 					</button>
-				</div>
 
-				<div className="flex gap-6 items-center">
 					{username === username_ ? (
 						<Link
 							to={`/editor/${blog_id}`}

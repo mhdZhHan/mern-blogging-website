@@ -16,6 +16,7 @@ import ChangePassword from "../screens/ChangePassword"
 import EditProfile from "../screens/EditProfile"
 import Notifications from "../screens/Notifications"
 import ManageBlogs from "../screens/ManageBlogs"
+import Report from "../screens/Report"
 
 import AdminAuth from "../screens/admin/AdminAuth"
 import Blogs from "../screens/admin/Blogs"
@@ -51,7 +52,7 @@ const Routes_ = () => {
 						path="signin"
 						element={<AuthForm type="sign-in" />}
 					/>
-					
+
 					<Route
 						path="signup"
 						element={<AuthForm type="sign-up" />}
@@ -59,6 +60,7 @@ const Routes_ = () => {
 					<Route path="search/:query" element={<Search />} />
 					<Route path="user/:id" element={<UserProfile />} />
 					<Route path="blog/:blogId" element={<Blog />} />
+					<Route path="report/:blogId" element={<Report />} />
 					<Route path="*" element={<PageNotFound />} />
 
 					<Route path="admin">

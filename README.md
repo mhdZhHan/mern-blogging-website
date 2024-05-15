@@ -32,6 +32,7 @@ Check out the live demo of the inkspire platform [here](https://inkspire.mohamme
   - **React.js:** JavaScript library for building user interfaces.
   - **React Context API:** State management solution for managing application state.
   - **Axios:** Promise-based HTTP client for making requests to the backend API.
+  - **Tailwind CSS:** Utility-first CSS framework for rapidly building custom designs.
   - **Vercel:** Frontend deployment platform for hosting the React application.
 
 - **Backend:**

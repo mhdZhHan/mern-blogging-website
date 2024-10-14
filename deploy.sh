@@ -104,6 +104,7 @@ sudo certbot --nginx -d $DOMAIN_NAME
 
 # Configure firewall to allow traffic
 echo "Configuring firewall..."
+sudo apt install ufw -y
 sudo ufw allow 'Nginx Full'
 sudo ufw enable
 

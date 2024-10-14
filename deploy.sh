@@ -80,7 +80,7 @@ echo "Setting up Nginx for domain $DOMAIN_NAME..."
 sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
 server {
     listen 80;
-    server_name $DOMAIN_NAME www.$DOMAIN_NAME;
+    server_name $DOMAIN_NAME;
 
     location / {
         proxy_pass http://127.0.0.1:$PORT;
@@ -100,7 +100,7 @@ sudo systemctl restart nginx
 # Set Up SSL Using Certbot
 #=================================================================================
 echo "Setting up SSL with Certbot for domain $DOMAIN_NAME..."
-sudo certbot --nginx -d $DOMAIN_NAME -d www.$DOMAIN_NAME
+sudo certbot --nginx -d $DOMAIN_NAME
 
 # Configure firewall to allow traffic
 echo "Configuring firewall..."

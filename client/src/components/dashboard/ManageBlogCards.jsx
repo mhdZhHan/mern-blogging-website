@@ -156,7 +156,7 @@ const deleteBlog = (blog, access_token, target) => {
 
 	axios
 		.post(
-			`${import.meta.env.VITE_API_URL}/blogs/delete`,
+			`/api/v1/blogs/delete`,
 			{ blog_id },
 			{
 				headers: {

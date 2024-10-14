@@ -34,7 +34,7 @@ const NotificationCommentField = ({
 
 		axios
 			.post(
-				`${import.meta.env.VITE_API_URL}/comments/add`,
+				`/api/v1/comments/add`,
 				{
 					blog_id: _id,
 					blog_author: user_id,

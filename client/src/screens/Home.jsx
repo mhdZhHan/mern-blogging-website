@@ -34,7 +34,7 @@ const Home = () => {
 
     const fetchLatestBlogs = ({ page = 1 }) => {
         axios
-            .post(`${import.meta.env.VITE_API_URL}/blogs/latest`, { page })
+            .post(`/api/v1/blogs/latest`, { page })
             .then(async ({ data }) => {
                 // setBlogs(data?.blogs)
 
@@ -54,7 +54,7 @@ const Home = () => {
 
     const fetchBlogsByCategory = ({ page = 1 }) => {
         axios
-            .post(`${import.meta.env.VITE_API_URL}/blogs/search`, {
+            .post(`/api/v1/blogs/search`, {
                 tag: pageState,
                 page,
             })
@@ -76,7 +76,7 @@ const Home = () => {
 
     const fetchTrendingBlogs = () => {
         axios
-            .get(`${import.meta.env.VITE_API_URL}/blogs/trending`)
+            .get(`/api/v1/blogs/trending`)
             .then(({ data }) => {
                 setTrendingBlogs(data?.blogs)
             })

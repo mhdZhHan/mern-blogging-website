@@ -134,7 +134,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
 		axios
 			.post(
-				`${import.meta.env.VITE_API_URL}/comments/delete`,
+				`/api/v1/comments/delete`,
 				{ _id },
 				{
 					headers: {
@@ -162,7 +162,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 			hideReplies()
 
 			axios
-				.post(`${import.meta.env.VITE_API_URL}/comments/get/replies`, {
+				.post(`/api/v1/comments/get/replies`, {
 					_id: commentsArray[currentIndex]._id,
 					skip,
 				})

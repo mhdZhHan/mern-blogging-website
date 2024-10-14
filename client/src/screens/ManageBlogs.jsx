@@ -35,7 +35,7 @@ const ManageBlogs = () => {
 	const getBlogs = ({ page, draft, deletedDocCount = 0 }) => {
 		axios
 			.post(
-				`${import.meta.env.VITE_API_URL}/users/blogs`,
+				`/api/v1/users/blogs`,
 				{
 					page,
 					draft,

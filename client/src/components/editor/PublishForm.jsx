@@ -99,7 +99,7 @@ const PublishForm = ({ setEditorState }) => {
         // send data to server
         axios
             .post(
-                `${import.meta.env.VITE_API_URL}/blogs/create`,
+                `/api/v1/blogs/create`,
                 { ...blogDate, id: blogId },
                 {
                     headers: {

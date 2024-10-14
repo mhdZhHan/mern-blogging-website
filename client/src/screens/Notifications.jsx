@@ -29,7 +29,7 @@ const Notifications = () => {
 	const fetchNotifications = ({ page, deletedDocCount = 0 }) => {
 		axios
 			.post(
-				`${import.meta.env.VITE_API_URL}/notifications`,
+				`/api/v1/notifications`,
 				{ page, filter, deletedDocCount },
 				{
 					headers: {

@@ -54,7 +54,7 @@ const Blog = () => {
 
     const fetchBlog = () => {
         axios
-            .post(`${import.meta.env.VITE_API_URL}/blogs/get-blog`, {
+            .post(`/api/v1/blogs/get-blog`, {
                 blog_id: blogId,
             })
             .then(async ({ data: { blog } }) => {
@@ -74,7 +74,7 @@ const Blog = () => {
                  * eliminate_blog => remove the current opened blog from the recommendation
                  */
                 axios
-                    .post(`${import.meta.env.VITE_API_URL}/blogs/search`, {
+                    .post(`/api/v1/blogs/search`, {
                         tag: tags[0],
                         limit: 6,
                         eliminate_blog: blogId,

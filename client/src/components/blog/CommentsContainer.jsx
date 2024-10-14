@@ -17,7 +17,7 @@ export const fetchComments = async ({
     let res
 
     await axios
-        .post(`${import.meta.env.VITE_API_URL}/comments/get`, {
+        .post(`/api/v1/comments/get`, {
             blog_id,
             skip,
         })

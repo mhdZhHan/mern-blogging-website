@@ -25,7 +25,7 @@ const Blogs = () => {
 
 	const getUsers = () => {
 		axios
-			.get(`${import.meta.env.VITE_API_URL}/admin/all-users`, {
+			.get(`/api/v1/admin/all-users`, {
 				headers: {
 					Authorization: `Bearer ${admin_token}`,
 				},

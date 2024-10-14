@@ -22,7 +22,7 @@ const Search = () => {
 
     const searchBlogs = ({ page = 1, createNewArr = false }) => {
         axios
-            .post(`${import.meta.env.VITE_API_URL}/blogs/search`, {
+            .post(`/api/v1/blogs/search`, {
                 query,
                 page,
             })
@@ -42,7 +42,7 @@ const Search = () => {
 
     const fetchUsers = () => {
         axios
-            .post(`${import.meta.env.VITE_API_URL}/users/search`, { query })
+            .post(`/api/v1/users/search`, { query })
             .then(({ data: { users } }) => {
                 setUsers(users)
             })

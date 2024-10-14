@@ -33,7 +33,7 @@ const ReportForm = () => {
 
 		axios
 			.post(
-				`${import.meta.env.VITE_API_URL}/admin/add-report`,
+				`/api/v1/admin/add-report`,
 				{
 					report_title: reportTitle,
 					report_message: reportMessage,

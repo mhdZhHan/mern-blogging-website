@@ -20,7 +20,7 @@ const AuthForm = ({ type }) => {
 
     const userAuthThroughApi = (apiRoute, formData) => {
         axios
-            .post(`${import.meta.env.VITE_API_URL}/auth/${apiRoute}`, formData)
+            .post(`/api/v1/auth/${apiRoute}`, formData)
             .then((response) => {
                 updateUserData({ type: "LOGIN", payload: response?.data?.user })
             })

@@ -52,7 +52,7 @@ const UserProfile = () => {
 
     const fetchUserProfile = () => {
         axios
-            .post(`${import.meta.env.VITE_API_URL}/users/profile`, {
+            .post(`/api/v1/users/profile`, {
                 username: profileId,
             })
             .then(({ data }) => {
@@ -73,7 +73,7 @@ const UserProfile = () => {
         userId = userId === undefined ? blogs.userId : userId
 
         axios
-            .post(`${import.meta.env.VITE_API_URL}/blogs/search`, {
+            .post(`/api/v1/blogs/search`, {
                 author: userId,
                 page,
             })

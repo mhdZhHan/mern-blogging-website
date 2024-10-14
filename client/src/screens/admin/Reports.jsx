@@ -20,7 +20,7 @@ const Reports = () => {
 
 	const getReports = () => {
 		axios
-			.get(`${import.meta.env.VITE_API_URL}/admin/get-reports`, {
+			.get(`/api/v1/admin/get-reports`, {
 				headers: {
 					Authorization: `Bearer ${admin_token}`,
 				},

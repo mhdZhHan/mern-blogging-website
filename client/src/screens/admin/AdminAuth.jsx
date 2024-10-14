@@ -25,7 +25,7 @@ const AdminAuth = () => {
 		}
 
 		axios
-			.post(`${import.meta.env.VITE_API_URL}/admin/login`, formData)
+			.post(`/api/v1/admin/login`, formData)
 			.then((response) => {
 				console.log("Hello", response)
 

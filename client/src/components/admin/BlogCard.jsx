@@ -57,7 +57,7 @@ const BlogCard = ({ blog, setBlogs, index }) => {
 
 		axios
 			.post(
-				`${import.meta.env.VITE_API_URL}/admin/delete-blog`,
+				`/api/v1/admin/delete-blog`,
 				{ blog_id, username },
 				{
 					headers: {

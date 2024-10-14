@@ -50,7 +50,7 @@ const ChangePassword = () => {
 
 		axios
 			.post(
-				`${import.meta.env.VITE_API_URL}/auth/change-password`,
+				`/api/v1/auth/change-password`,
 				formData,
 				{
 					headers: {

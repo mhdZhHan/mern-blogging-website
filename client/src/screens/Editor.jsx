@@ -45,7 +45,7 @@ const Editor = () => {
         }
 
         axios
-            .post(`${import.meta.env.VITE_API_URL}/blogs/get-blog`, {
+            .post(`/api/v1/blogs/get-blog`, {
                 blog_id: blogId,
                 draft: true,
                 mode: "edit",

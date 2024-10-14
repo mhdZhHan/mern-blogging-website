@@ -26,7 +26,7 @@ const Blogs = () => {
 
 	const getBlogs = ({ page = 1 }) => {
 		axios
-			.post(`${import.meta.env.VITE_API_URL}/blogs/latest`, { page })
+			.post(`/api/v1/blogs/latest`, { page })
 			.then(async ({ data }) => {
 				// setBlogs(data?.blogs)
 

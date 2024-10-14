@@ -139,7 +139,7 @@ const EditProfile = () => {
 
 		axios
 			.post(
-				`${import.meta.env.VITE_API_URL}/users/update-profile`,
+				`/api/v1/users/update-profile`,
 				{
 					username,
 					bio,
@@ -185,7 +185,7 @@ const EditProfile = () => {
 	useEffect(() => {
 		if (access_token) {
 			axios
-				.post(`${import.meta.env.VITE_API_URL}/users/profile`, {
+				.post(`/api/v1/users/profile`, {
 					username: userData.username,
 				})
 				.then(({ data }) => {

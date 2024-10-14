@@ -3,9 +3,6 @@
 #=================================================================================
 # User Input Section
 #=================================================================================
-echo "Enter the GitHub repository URL (e.g., https://github.com/username/repo.git):"
-read REPO_URL
-
 echo "Enter the domain name (e.g., demo.mohammedsh.xyz):"
 read DOMAIN_NAME
 
@@ -27,29 +24,6 @@ sudo apt install -y nodejs
 # Install PM2 to manage the Node.js app
 echo "Installing PM2..."
 sudo npm install pm2 -g
-
-#=================================================================================
-# Define Production Directory and Clone Repository
-#=================================================================================
-PRODUCTION_DIR="/home/ubuntu/production"
-
-# Ensure the production directory exists
-if [ ! -d "$PRODUCTION_DIR" ]; then
-    echo "Creating production directory at $PRODUCTION_DIR..."
-    mkdir -p $PRODUCTION_DIR
-fi
-
-# Extract the repository name from the URL (removing .git if present)
-REPO_NAME=$(basename -s .git $REPO_URL)
-
-# Clone the repository into the production directory using the repo name
-echo "Cloning repository from $REPO_URL into $PRODUCTION_DIR/$REPO_NAME..."
-cd $PRODUCTION_DIR
-git clone $REPO_URL
-
-# Navigate into the newly cloned project directory
-cd $REPO_NAME
-echo "Now inside the project directory: $(pwd)"
 
 #=================================================================================
 # .env File Handling
@@ -95,6 +69,7 @@ echo "Installing backend and frontend dependencies, and building the frontend...
 npm run build
 
 # Start the app with PM2 dynamically using the repo name
+REPO_NAME=$(basename -s .git "$(git config --get remote.origin.url)")
 echo "Starting the app with PM2 using process name $REPO_NAME..."
 pm2 start npm --name "$REPO_NAME" -- run start
 
